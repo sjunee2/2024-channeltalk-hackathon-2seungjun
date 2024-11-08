@@ -3,16 +3,15 @@ import { ChannelApiService } from 'src/channel-api/channelApi.service';
 import { Command } from 'src/common/interfaces/command';
 import { BaseFunctionRequest } from 'src/common/interfaces/function.interface';
 import { HandlerService } from 'src/common/service/handler.service';
-import { TutorialOutput } from 'src/tutorial/tutorial.dto';
-import { TutorialInput } from 'src/tutorial/tutorial.dto';
+import { TaskInput, TaskOutput } from 'src/task/task.dto';
 
-export const TUTORIAL = 'tutorial';
-export const GET_USER = 'getUser';
+export const TASK = 'task';
 @Injectable()
-export class TutorialService
-  implements HandlerService<TutorialInput, TutorialOutput>, OnModuleInit
+export class TaskService
+  implements HandlerService<TaskInput, TaskOutput>, OnModuleInit
 {
-  private readonly logger = new Logger(TutorialService.name);
+  private readonly logger = new Logger(TaskService.name);
+  private readonly appId = process.env.CHANNEL_APPLICATION_ID;
 
   constructor(private readonly apiService: ChannelApiService) {}
 
@@ -21,7 +20,7 @@ export class TutorialService
       await this.apiService.waitForInitialization();
       await this.registerCommand();
     } catch (error) {
-      this.logger.error('Failed to initialize TutorialService', error.stack);
+      this.logger.error('Failed to initialize TaskService', error.stack);
       throw error;
     }
   }
@@ -29,9 +28,7 @@ export class TutorialService
   /**
    * 실제 로직 처리
    */
-  async execute(
-    body: BaseFunctionRequest<TutorialInput>,
-  ): Promise<TutorialOutput> {
+  async execute(body: BaseFunctionRequest<TaskInput>): Promise<TaskOutput> {
     console.log(body);
     const newRequest = BaseFunctionRequest.createNew(body);
     newRequest.setMethod('writeGroupMessage');
@@ -44,11 +41,16 @@ export class TutorialService
         botName: '이승준',
       },
     });
-    console.log(newRequest);
     const result = await this.apiService.useNativeFunction(newRequest);
     return {
       result: {
-        hello: result.data.result,
+        type: 'wam',
+        attributes: {
+          clientId: body.context.caller.id.toString(),
+          appId: this.appId,
+          name: 'task',
+          wamArgs: {},
+        },
       },
     };
   }
@@ -57,15 +59,15 @@ export class TutorialService
    * 외부 채널에 `tutorial` 커맨드를 등록하는 메서드
    */
   private async registerCommand() {
-    const commandForTutorial: Command = {
-      name: TUTORIAL,
+    const commandForTask: Command = {
+      name: TASK,
       scope: 'desk',
-      description: 'This is a desk command of App-tutorial',
-      actionFunctionName: TUTORIAL,
+      description: '⭐🌟2승준의 특별한 캘린더 열기⭐🌟',
+      actionFunctionName: TASK,
       alfMode: 'disable',
       enabledByDefault: true,
     };
 
-    await this.apiService.registerCommandToChannel([commandForTutorial]);
+    await this.apiService.registerCommandToChannel([commandForTask]);
   }
 }
