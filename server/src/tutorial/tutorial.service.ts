@@ -3,6 +3,7 @@ import { ChannelApiService } from 'src/channel-api/channelApi.service';
 import { Command } from 'src/common/interfaces/command';
 import { BaseFunctionRequest } from 'src/common/interfaces/function.interface';
 import { HandlerService } from 'src/common/service/handler.service';
+import { TASK } from 'src/task/task.service';
 import { TutorialOutput } from 'src/tutorial/tutorial.dto';
 import { TutorialInput } from 'src/tutorial/tutorial.dto';
 
@@ -12,6 +13,7 @@ export class TutorialService
   implements HandlerService<TutorialInput, TutorialOutput>, OnModuleInit
 {
   private readonly logger = new Logger(TutorialService.name);
+  private readonly appId = process.env.CHANNEL_APPLICATION_ID;
 
   constructor(private readonly apiService: ChannelApiService) {}
 
@@ -40,6 +42,21 @@ export class TutorialService
       dto: {
         plainText: '하이하이',
         botName: '이승준',
+        buttons: [
+          {
+            title: '클릭하면 WAM이 뜹니다!',
+            colorVariant: 1,
+            action: {
+              WAMAction: {
+                attributes: {
+                  appId: this.appId,
+                  name: TASK,
+                  params: {},
+                },
+              },
+            },
+          },
+        ],
       },
     });
     console.log(newRequest);

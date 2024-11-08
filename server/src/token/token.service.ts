@@ -30,8 +30,9 @@ export class TokenService {
   async getChannelToken(channelId: string = 'general'): Promise<TokenResponse> {
     try {
       console.log('get channel Token by ', channelId);
-      const cachedToken: string | undefined =
-        await this.cacheManager.get(channelId);
+      const cachedToken: string | undefined = await this.cacheManager.get(
+        this.setCacheKey(channelId),
+      );
       const channelToken: TokenResponse | undefined =
         typeof cachedToken === 'string' ? JSON.parse(cachedToken) : undefined;
       if (

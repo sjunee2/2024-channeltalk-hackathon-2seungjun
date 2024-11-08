@@ -13,6 +13,12 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  @Column({ type: 'bigint' })
+  channelId: number;
+
+  @Column()
+  avatarUrl: string;
+
   @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.user)
   taskUserMaps: TaskUserMapEntity[];
 }
