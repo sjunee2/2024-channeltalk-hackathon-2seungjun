@@ -10,7 +10,7 @@ import { MantineProvider } from '@mantine/core'
 function App() {
   const router = createBrowserRouter([
     {
-      path: '/calendar',
+      path: '/',
       element: <CalendarPage />,
     },
   ])
