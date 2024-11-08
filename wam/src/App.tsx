@@ -4,27 +4,60 @@ import { isMobile } from './utils/userAgent'
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css'
 
-import { MantineProvider } from '@mantine/core'
+import { Button, MantineProvider } from '@mantine/core'
 import Calendar from './componenets/Calendar'
-import { FilterStatusInterface, Role, Task, User } from './types/task'
+import Filter from './componenets/Filter'
+import List from './componenets/List'
+import { Role, Task, User } from './types/task'
 import { useEffect, useState } from 'react'
+import { useFilterStore } from './store/filter'
 
 function App() {
   const [taskData, setTaskData] = useState<Task[]>([])
-  const [filterState, setFilterState] = useState<FilterStatusInterface>({
-    status: [],
-    assignUser: [],
-    role: [],
-  })
-  // const filteredData = useMemo(() => tas)
+  const { status, role, assignUser } = useFilterStore()
+
+  const [page, setPage] = useState<'calendar' | 'list'>('calendar')
+
   useEffect(() => {
-    setTaskData([])
-    setFilterState({
-      status: [],
-      assignUser: [],
-      role: [],
-    })
+    setTaskData([
+      {
+        id: 1,
+        status: 'proposal',
+        title: '제안서 작성',
+        contents: '제안서 작성하기',
+        startDate: '2021-09-01',
+        endDate: '2021-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+      {
+        id: 2,
+        status: 'progress',
+        title: '제안서 검토',
+        contents: '제안서 검토하기',
+        startDate: '2021-09-01',
+        endDate: '2021-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+    ])
   }, [])
+
+  const filterTasks = (
+    tasks: Task[],
+    status: string,
+    role: string,
+    assignUser: string
+  ) => {
+    return tasks.filter(
+      (task) =>
+        (status !== 'none' ? task.status === status : true) &&
+        (role !== 'none' ? task.role === role : true) &&
+        (assignUser !== 'none' ? task.assignUser.includes(assignUser) : true)
+    )
+  }
+
+  // const filteredData = useMemo(() => tas)
 
   const roleData: Role[] = []
   const userData: User[] = []
@@ -33,14 +66,29 @@ function App() {
   return (
     // <AppProvider themeName={theme}>
     <MantineProvider>
-      <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Calendar
-          taskData={taskData}
-          filterState={filterState}
-          roleData={roleData}
-          userData={userData}
-          myData={myData}
-        />
+      <div
+        style={{
+          width: '800px',
+          height: '700px',
+          backgroundColor: 'whiteSmoke',
+          display: 'flex',
+          justifyContent: 'center',
+          padding: isMobile() ? '16px' : '0 24px 24px 24px',
+        }}
+      >
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Button
+            onClick={() => {
+              setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
+            }}
+          />
+          <Filter />
+          {page === 'calendar' ? (
+            <Calendar taskData={taskData} />
+          ) : (
+            <List taskData={filterTasks(taskData, status, role, assignUser)} />
+          )}
+        </div>
       </div>
     </MantineProvider>
     // </AppProvider>
