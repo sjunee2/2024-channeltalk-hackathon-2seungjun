@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useDebouncedCallback } from '@mantine/hooks'
 import { callFunction } from '../../utils/wam'
 import { useAppIdStore } from '../../store/appId'
+import styled from 'styled-components'
 
 const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assignUser }: Task) => {
   const [task, setTask] = useState({
@@ -92,17 +93,36 @@ const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assig
   }
 
   return (
-    <div key={id}>
-      <button name="status" onClick={onStatusClick} onContextMenu={onStatusRightClick}>{task.status}</button>
-      <button name="assignUser" onClick={onAssignUserClick} onContextMenu={onAssignUserRightClick}>{task.assignUser}</button>
-      <input name="role" value={task.role} onChange={onChange} onBlur={onBlur} />
-      <input name="title" value={task.title} onChange={onChange} onBlur={onBlur} />
-      <input name="contents" value={task.contents} onChange={onChange} onBlur={onBlur} />
-      <input name="startDate" type="date" value={task.startDate} onChange={onChange} onBlur={onBlur} />
-      <input name="endDate" type="date" value={task.endDate} onChange={onChange} onBlur={onBlur} />
-      <button onClick={onDelete}>Delete</button>
-    </div>
+    <Wrapper key={id}>
+      <CustomButton name="status" onClick={onStatusClick} onContextMenu={onStatusRightClick}>{task.status}</CustomButton>
+      <CustomButton name="assignUser" onClick={onAssignUserClick} onContextMenu={onAssignUserRightClick}>{task.assignUser}</CustomButton>
+      <CustomInput name="role" value={task.role} onChange={onChange} onBlur={onBlur} />
+      <CustomInput name="title" value={task.title} onChange={onChange} onBlur={onBlur} />
+      <CustomInput name="contents" value={task.contents} onChange={onChange} onBlur={onBlur} />
+      <CustomInput name="startDate" type="date" value={task.startDate} onChange={onChange} onBlur={onBlur} />
+      <CustomInput name="endDate" type="date" value={task.endDate} onChange={onChange} onBlur={onBlur} />
+      <CustomButton onClick={onDelete}>Delete</CustomButton>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.div`
+display: flex;
+`
+
+const CustomButton = styled.button`
+border: none;
+font-size: 16px;
+background-color: white;
+width: 80px;
+text-align: center;
+`
+
+const CustomInput = styled.input`
+font-size: 16px;
+border: none;
+width: 110px;
+text-align: center;
+`
 
 export default TaskItem

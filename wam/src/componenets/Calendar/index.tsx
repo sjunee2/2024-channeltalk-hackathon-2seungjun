@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { groupDatesByWeek } from './groupDatesByWeek'
 import { Button } from '@mantine/core'
 import { colorsArray } from './colors'
+import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
 const dayList = ['Sun', 'Mon', 'Thu', 'Wed', 'Thr', 'Fri', 'Sat']
 
@@ -20,6 +21,7 @@ const ButtonWrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   width: 100%;
+  padding: 0 30px 0 30px;
 `
 const DateListContainer = styled.div`
   display: flex;
@@ -97,9 +99,9 @@ const Calendar = ({ taskData }: CalendarProps) => {
   return (
     <Wrapper>
       <ButtonWrapper>
-        <Button onClick={toPrevMonth}>이전달</Button>
+        <FaChevronLeft style={{width: '16px', height: '16px'}} onClick={toPrevMonth}></FaChevronLeft>
         <h1>{`${format(curDate, 'yyyy')}년 ${format(curDate, 'M')}월`}</h1>
-        <Button onClick={toNextMonth}>다음달</Button>
+        <FaChevronRight style={{width: '16px', height: '16px'}} onClick={toNextMonth}></FaChevronRight>
       </ButtonWrapper>
       <DateListContainer>
         {dayList.map((val) => (

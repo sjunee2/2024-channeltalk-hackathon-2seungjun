@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import styled from 'styled-components'
 
 const AddTaskItem = () => {
   const [task, setTask] = useState({
@@ -63,19 +64,54 @@ const AddTaskItem = () => {
     }))
   }
 
+  const onAssignUserClick = () => {
+    console.log('Assign user')
+  }
+
+  const onAssignUserRightClick = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault()
+    if (task.assignUser) {
+      setTask((prevTask) => ({
+        ...prevTask,
+        assignUser: [],
+      }))
+    }
+    console.log('Assign user')
+  }
+
   return (
-    <form onSubmit={onSubmit}>
-      <button type="button" name="status" onClick={onStatusClick} onContextMenu={onStatusRightClick}>
+    <Wrapper onSubmit={onSubmit}>
+      <CustomButton type="button" name="status" onClick={onStatusClick} onContextMenu={onStatusRightClick}>
         {task.status}
-      </button>
-      <input name="title" value={task.title} onChange={onChange} />
-      <input name="role" value={task.role} onChange={onChange} />
-      <input name="contents" value={task.contents} onChange={onChange} />
-      <input name="startDate" type="date" value={task.startDate} onChange={onChange} />
-      <input name="endDate" type="date" value={task.endDate} onChange={onChange} />
-      <button type="submit">Submit</button>
-    </form>
+      </CustomButton>
+      <CustomButton name="assignUser" onClick={onAssignUserClick} onContextMenu={onAssignUserRightClick}>{task.assignUser}</CustomButton>
+      <CustomInput name="title" value={task.title} onChange={onChange} />
+      <CustomInput name="role" value={task.role} onChange={onChange} />
+      <CustomInput name="contents" value={task.contents} onChange={onChange} />
+      <CustomInput name="startDate" type="date" value={task.startDate} onChange={onChange} />
+      <CustomInput name="endDate" type="date" value={task.endDate} onChange={onChange} />
+      <CustomButton type="submit">Submit</CustomButton>
+    </Wrapper>
   )
 }
+
+const Wrapper = styled.form`
+display: flex;
+`
+
+const CustomButton = styled.button`
+border: none;
+font-size: 16px;
+background-color: white;
+width: 80px;
+text-align: center;
+`
+
+const CustomInput = styled.input`
+text-align: center;
+font-size: 16px;
+border: none;
+width: 110px;
+`
 
 export default AddTaskItem

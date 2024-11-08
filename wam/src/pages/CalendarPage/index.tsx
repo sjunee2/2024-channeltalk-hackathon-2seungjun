@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useFilterStore } from '../../store/filter'
 import { Button } from '@channel.io/bezier-react'
 import Filter from '../../componenets/Filter'
@@ -6,9 +6,23 @@ import Calendar from '../../componenets/Calendar'
 import List from '../../componenets/List'
 import { isMobile } from '../../utils/userAgent'
 import { Task } from '../../types/task'
+import { FaCalendarAlt, FaBars } from 'react-icons/fa'
+import styled from 'styled-components'
 
 const CalendarPage = () => {
   const [taskData, setTaskData] = useState<Task[]>([])
+  useEffect(() => {
+    setTaskData([{
+      id: 1,
+      status: 'proposal',
+      title: 'title',
+      contents: 'contents',
+      startDate: '2021-09-01',
+      endDate: '2024-09-10',
+      role: 'owner',
+      assignUser: ['123'],
+    }])}, [])
+
   const { status, role, assignUser } = useFilterStore()
 
   const [page, setPage] = useState<'calendar' | 'list'>('calendar')
@@ -179,21 +193,54 @@ const CalendarPage = () => {
         padding: isMobile() ? '16px' : '0 24px 24px 24px',
       }}
     >
-      <div style={{ display: 'flex', flexDirection: 'column' }}>
-        <Button
-          onClick={() => {
+      <Wrapper>
+        <ToggleWrapper>
+          <ToggleButton onClick={() => {
             setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
-          }}
-        />
-        <Filter />
+          }}>
+            {page === 'calendar' ? <FaBars /> : <FaCalendarAlt />}
+          </ToggleButton>
+          <Filter />
+        </ToggleWrapper>
         {page === 'calendar' ? (
           <Calendar taskData={filteredData} />
         ) : (
           <List taskData={filteredData} />
         )}
-      </div>
+      </Wrapper>
     </div>
   )
 }
+
+const ToggleWrapper = styled.div`
+padding-top: 10px;
+display: flex;
+flex-direction: row;
+gap: 60px;
+`
+
+const ToggleButton = styled.div`
+height: 40px;
+width: 40px;
+border-radius: 10px;
+
+display: flex;
+justify-content: center;
+align-items: center;
+
+svg {
+  color: #4A4F5A;
+  font-size: 24px;
+  transition: transform 0.3s ease;
+}
+`
+
+const Wrapper = styled.div`
+display: flex;
+flex-direction: column;
+gap: 10px;
+width: 100%;
+`
+
 
 export default CalendarPage

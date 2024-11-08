@@ -1,12 +1,14 @@
 import { Select } from '@mantine/core';
 import { useFilterStore } from '../../store/filter';
+import styled from 'styled-components';
+import './select.css';
 
 const Filter = () => {
 
   const { setStatus, setRole, setAssignUser } = useFilterStore();
 
   return (
-    <div>
+    <Wrapper>
       <Select
         label="status"
         placeholder="status"
@@ -34,8 +36,15 @@ const Filter = () => {
         nothingFoundMessage="Nothing found..."
         onChange = {(value) => value !== null && setAssignUser(value)}
       />
-    </div>
+    </Wrapper>
   );
 };
+
+const Wrapper = styled.div`
+display: flex;
+flex-direction: row;
+gap: 16px;
+`;
+
 
 export default Filter;
