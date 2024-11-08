@@ -2,7 +2,6 @@ import { Task } from '../../types/task'
 import { useState } from 'react'
 import { useDebouncedCallback } from '@mantine/hooks'
 import { getWamData } from '../../utils/wam'
-import { useAppIdStore } from '../../store/appId'
 import styled from 'styled-components'
 import { BASE_URL } from '../../secret'
 
@@ -27,8 +26,6 @@ const TaskItem = ({
     assignUser: assignUser,
   })
 
-  const { appId } = useAppIdStore()
-
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
     setTask({
@@ -39,7 +36,25 @@ const TaskItem = ({
   }
 
   const debouncedUpdateServer = useDebouncedCallback((task: Task) => {
-    console.log('Update server', task)
+    const channelId = getWamData('channelId') ?? []
+    fetch(`${BASE_URL}/functions/task`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        id: task.id,
+        channelId,
+        taskStatus: task.status,
+        title: task.title,
+        contents: task.contents,
+        role: task.role,
+        startDate: task.startDate,
+        endDate: task.endDate,
+        userIds: task.assignUser,
+        deleteAt: new Date().getTime(),
+      }),
+    })
   }, 1000)
 
   const onBlur = () => {
