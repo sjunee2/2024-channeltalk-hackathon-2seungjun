@@ -15,9 +15,8 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
-import { GetAllTaskResponseDto, HandleTaskRequestDto } from './task/task.dto';
+import { HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
-import { channel } from 'diagnostics_channel';
 import { TaskEntity } from './infra/task.entity';
 
 @Controller('functions')
@@ -64,7 +63,7 @@ export class AppController {
   @Get('task/:channelId')
   async getTaskAll(
     @Param('channelId') channelId: string,
-  ): Promise<TaskEntity> {
+  ): Promise<TaskEntity[]> {
     try {
       return await this.appService.getTaskAll(channelId);
     } catch (error) {

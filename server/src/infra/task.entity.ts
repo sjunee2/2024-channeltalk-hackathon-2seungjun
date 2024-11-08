@@ -16,7 +16,7 @@ import { ChannelEntity } from 'src/infra/channel.entity';
 @Entity('task')
 export class TaskEntity extends CommonEntity {
   @ApiProperty({ description: 'Task 아이디' })
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({ description: 'Task 상태' })
@@ -47,7 +47,7 @@ export class TaskEntity extends CommonEntity {
   channel: ChannelEntity;
 
   @RelationId((task: TaskEntity) => task.channel)
-  @Column({ type: 'bigint', name: 'channel_id' })
+  @Column()
   channelId: number;
 
   @ApiProperty({ type: [TaskUserMapEntity] })

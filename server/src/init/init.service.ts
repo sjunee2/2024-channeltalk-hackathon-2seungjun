@@ -46,24 +46,40 @@ export class InitService
     });
     const result = await this.apiService.useNativeFunction(newRequest);
     const channelInfo = result.data.result.channel;
-    console.log(channelInfo);
-    const channel = await this.channelsRepository.save({
-      id: parseInt(channelInfo.id),
-      groupId: parseInt(body.params.chat.id),
+    const channel: ChannelEntity = await this.channelsRepository.create({
+      id: Number(channelInfo.id),
+      groupId: Number(body.params.chat.id),
     });
     console.log(channel);
-    const newreq = BaseFunctionRequest.createNew(body);
-    newreq.setMethod('writeGroupMessage');
-    newreq.addParams({
+    await this.channelsRepository.save(channel);
+    const request2 = BaseFunctionRequest.createNew(body);
+    request2.setMethod('writeGroupMessage');
+    request2.addParams({
       channelId: body.context.channel.id,
       groupId: body.params.chat.id,
       rootMessageId: undefined,
       dto: {
         plainText: '채널 등록을 성공하였습니다! 이제 태스크를 등록해보세요!',
         botName: '캘린이',
+        buttons: [
+          {
+            title: '캘린더 바로가기',
+            colorVariant: 'COLOR_VARIANT_COBALT',
+            action: {
+              wamAction: {
+                attributes: {
+                  appId: this.appId,
+                  clientId: body.context.caller.id,
+                  name: 'calendar',
+                  params: {},
+                },
+              },
+            },
+          },
+        ],
       },
     });
-    await this.apiService.useNativeFunction(newreq);
+    await this.apiService.useNativeFunction(request2);
 
     return {
       result: { hello: result.data.result },
