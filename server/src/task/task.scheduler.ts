@@ -19,21 +19,25 @@ export class TaskScheduler {
     private readonly channelRepository: Repository<ChannelEntity>,
   ) {}
 
-  @Cron('*/10 * * * * *')
-  async handleCron() {
-    const tasks = await this.taskRepository.find({
-      //   where: { taskStatus: TaskStatus. },
-    });
-    console.log(tasks);
-  }
+  // @Cron('*/10 * * * * *')
+  // async handleCron() {
+  //   const tasks = await this.taskRepository.find({
+  //     //   where: { taskStatus: TaskStatus. },
+  //   });
+  //   console.log(tasks);
+  // }
 
-  // @Cron('0 */3 * * * *')
-  @Cron('*/10 * * * * *')
+  @Cron('0 */3 * * * *')
+  // @Cron('*/10 * * * * *')
   async overallMessage() {
     const channels = await this.channelRepository.find();
     for (const channel of channels) {
       const tasks = await this.taskRepository.find({
-        where: { taskStatus: Not(TaskStatus.DONE) },
+        where: {
+          taskStatus: Not(TaskStatus.DONE),
+          deletedAt: null,
+          channelId: channel.id,
+        },
       });
       // 1일 남은 일
       const oneDayTasks = tasks.filter((task) => {
@@ -70,7 +74,6 @@ export class TaskScheduler {
           },
         },
       } as BaseFunctionRequest<any>);
-      console.log('ㄷㄷ');
       request.setMethod('writeGroupMessage');
       request.addParams({
         channelId: channel.id,
@@ -100,7 +103,7 @@ ${oneWeekTasks.map((task) => `- ${task.title}`).join('\n')}`,
                   attributes: {
                     appId: this.appId,
                     clientId: channel.groupId,
-                    name: 'calendar',
+                    name: '/',
                     params: {},
                   },
                 },

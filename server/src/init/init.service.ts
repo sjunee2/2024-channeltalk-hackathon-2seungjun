@@ -71,7 +71,7 @@ export class InitService
                 attributes: {
                   appId: this.appId,
                   clientId: body.context.caller.id,
-                  name: 'calendar',
+                  name: '/',
                   params: {},
                 },
               },
