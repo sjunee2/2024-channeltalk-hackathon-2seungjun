@@ -59,6 +59,16 @@ function App() {
   return (
     // <AppProvider themeName={theme}>
     <MantineProvider>
+      <div
+        style={{
+          width: '800px',
+          height: '700px',
+          backgroundColor: 'whiteSmoke',
+          display: 'flex',
+          justifyContent: 'center',
+          padding: isMobile() ? '16px' : '0 24px 24px 24px',
+        }}
+      >
       <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
         <Filter />
         <List taskData={filterTasks(taskData, status, role, assignUser)} />
