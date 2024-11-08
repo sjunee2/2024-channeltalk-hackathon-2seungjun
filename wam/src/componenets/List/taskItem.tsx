@@ -1,6 +1,8 @@
 import { Task } from '../../types/task'
 import { useState } from 'react'
 import { useDebouncedCallback } from '@mantine/hooks'
+import { callFunction } from '../../utils/wam'
+import { useAppIdStore } from '../../store/appId'
 
 const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assignUser }: Task) => {
   const [task, setTask] = useState({
@@ -13,6 +15,8 @@ const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assig
     role: role,
     assignUser: assignUser,
   })
+
+  const { appId } = useAppIdStore()
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, type } = e.target
@@ -75,6 +79,18 @@ const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assig
     console.log('Assign user')
   }
 
+  const onDelete = () => {
+    async function deleteTask(task: Task) {
+      await callFunction(appId, 'PUT', {
+        input: {
+          task: task,
+        },
+      })
+    }
+    deleteTask(task)
+    console.log('Delete task', task)
+  }
+
   return (
     <div key={id}>
       <button name="status" onClick={onStatusClick} onContextMenu={onStatusRightClick}>{task.status}</button>
@@ -84,6 +100,7 @@ const TaskItem = ({ id, status, title, contents, startDate, endDate, role, assig
       <input name="contents" value={task.contents} onChange={onChange} onBlur={onBlur} />
       <input name="startDate" type="date" value={task.startDate} onChange={onChange} onBlur={onBlur} />
       <input name="endDate" type="date" value={task.endDate} onChange={onChange} onBlur={onBlur} />
+      <button onClick={onDelete}>Delete</button>
     </div>
   )
 }
