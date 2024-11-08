@@ -40,6 +40,7 @@ export class TaskService
    */
   async execute(body: BaseFunctionRequest<TaskInput>): Promise<TaskOutput> {
     let methodName;
+    console.log(body);
     const type = body.context.caller.type;
     switch (type) {
       case 'user':
