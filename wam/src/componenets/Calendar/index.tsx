@@ -4,6 +4,7 @@ import { format, addMonths, subMonths } from 'date-fns'
 import styled from 'styled-components'
 import { groupDatesByWeek } from './groupDatesByWeek'
 import { Button } from '@mantine/core'
+import { colorsArray } from './colors'
 
 const dayList = ['Sun', 'Mon', 'Thu', 'Wed', 'Thr', 'Fri', 'Sat']
 
@@ -39,13 +40,31 @@ const Cell = styled.div`
 `
 const DateContainer = styled(Cell)`
   gap: 5px;
-  height: 80px;
+  height: 90px;
 `
 const DayContainer = styled(Cell)`
   border-bottom: 1px solid black;
   height: 20px;
 `
-const DateText = styled.p``
+const DateText = styled.p`
+  height: 8px;
+`
+
+const TaskColumn = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`
+
+const TaskContainer = styled.div<{ color: string }>`
+  height: 16px;
+  width: 70px;
+  background-color: ${({ color }) => color};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 3px;
+`
 
 interface CalendarProps {
   taskData: Task[]
@@ -79,7 +98,7 @@ const Calendar = ({ taskData }: CalendarProps) => {
     <Wrapper>
       <ButtonWrapper>
         <Button onClick={toPrevMonth}>이전달</Button>
-        <h1>{`${format(curDate, 'M')}월 ${format(curDate, 'yyyy')}`}</h1>
+        <h1>{`${format(curDate, 'yyyy')}년 ${format(curDate, 'M')}월`}</h1>
         <Button onClick={toNextMonth}>다음달</Button>
       </ButtonWrapper>
       <DateListContainer>
@@ -93,7 +112,19 @@ const Calendar = ({ taskData }: CalendarProps) => {
             {weekData.map((dateData, dateInd) => (
               <DateContainer key={`${weekInd}-${dateInd}`}>
                 <DateText>{dateData.date.getDate()}</DateText>
-                <div>{dateData.tasks.map((val) => val.title)}</div>
+                <TaskColumn>
+                  {dateData.tasks.map((val, taskInd) => {
+                    if (taskInd < 3)
+                      return (
+                        <TaskContainer
+                          key={`${weekInd}-${dateInd}-${taskInd}`}
+                          color={colorsArray[Math.floor(Math.random() * 50)]}
+                        >
+                          {val.title}
+                        </TaskContainer>
+                      )
+                  })}
+                </TaskColumn>
               </DateContainer>
             ))}
           </WeekContainer>

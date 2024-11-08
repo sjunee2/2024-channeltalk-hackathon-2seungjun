@@ -1,5 +1,5 @@
 import { Task } from '../../types/task'
-import { isDateInRange } from './isDateInRange'
+import { isSameDate } from './isSameDate'
 
 export const groupDatesByWeek = (
   startDay: Date,
@@ -14,11 +14,7 @@ export const groupDatesByWeek = (
     currentWeek.push({
       date: new Date(currentDate),
       tasks: taskData.filter((val) =>
-        isDateInRange(
-          new Date(val.startDate),
-          new Date(val.endDate),
-          currentDate
-        )
+        isSameDate(new Date(val.endDate), currentDate)
       ),
     })
 
