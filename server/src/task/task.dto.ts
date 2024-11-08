@@ -5,13 +5,14 @@ import {
 } from 'src/common/interfaces/function.interface';
 import { TaskStatus } from 'src/infra/task-status.enum';
 import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
+import { UserEntity } from 'src/infra/user.entity';
 import { Timestamp } from 'typeorm';
 
 export class TaskInput extends BaseFunctionInput {}
 
 export class TaskOutput extends WamFunctionOutput {}
 
-export class CreateTaskRequestDto {
+export class HandleTaskRequestDto {
   @ApiProperty({ description: 'Task 아이디' })
   id: string;
 
@@ -38,4 +39,7 @@ export class CreateTaskRequestDto {
 
   @ApiProperty({ description: '배정 대상 유저들 id' })
   userIds: number[];
+
+  @ApiProperty({ description: '삭제일자' })
+  deletedAt: Timestamp | null;
 }
