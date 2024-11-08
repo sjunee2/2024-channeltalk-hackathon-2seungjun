@@ -27,8 +27,8 @@ export class TaskScheduler {
   //   console.log(tasks);
   // }
 
-  // @Cron('*/5 * * * *')
-  @Cron('*/10 * * * * *')
+  @Cron('*/5 * * * *')
+  // @Cron('*/10 * * * * *')
   async overallMessage() {
     const channels = await this.channelRepository.find();
     for (const channel of channels) {
@@ -37,6 +37,11 @@ export class TaskScheduler {
           taskStatus: Not(TaskStatus.DONE),
           deletedAt: null,
           channelId: channel.id,
+        },
+        relations: {
+          taskUserMaps: {
+            user: true,
+          },
         },
       });
       console.log(tasks);
@@ -85,17 +90,42 @@ export class TaskScheduler {
         rootMessageId: undefined,
         dto: {
           plainText: `📅 ${channel.name}의 ${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월 ${new Date().getDate()}일 할 일 현황을 알려드립니다 📅
+
 🚨 긴급 처리가 필요한 일정 (1일 이내 마감)
-현재 긴급하게 처리해야 할 일정이 ${oneDayTasks.length}개 있습니다. 서둘러 확인해주세요!
-${oneDayTasks.map((task) => `- ${task.title}${task.taskUserMaps}`).join('\n')}
+${
+  oneDayTasks.length === 0
+    ? '긴급한 일정이 없네요! 잘 하고 계십니다 👍'
+    : `현재 긴급하게 처리해야 할 일정이 ${oneDayTasks.length}개 있습니다. 서둘러 확인해주세요!\n${oneDayTasks
+        .map(
+          (task) =>
+            `- ${task.title} (${task.taskUserMaps.map((map) => map.user.name).join(', ')})`,
+        )
+        .join('\n')}`
+}
 
 ⚠️ 주의가 필요한 일정 (3일 이내 마감)
-앞으로 3일 안에 처리해야 할 일정이 ${threeDayTasks.length}개 있습니다. 미리미리 준비해주세요.
-${threeDayTasks.map((task) => `- ${task.title}`).join('\n')}
+${
+  threeDayTasks.length === 0
+    ? '3일 이내 마감되는 일정이 없습니다. 여유있게 일하세요! 🎉'
+    : `앞으로 3일 안에 처리해야 할 일정이 ${threeDayTasks.length}개 있습니다. 미리미리 준비해주세요.\n${threeDayTasks
+        .map(
+          (task) =>
+            `- ${task.title} (${task.taskUserMaps.map((map) => map.user.name).join(', ')})`,
+        )
+        .join('\n')}`
+}
 
-📌 장기 프로젝��� (1주일 이상)
-장기적으로 진행해야 할 프로젝트가 ${oneWeekTasks.length}개 있습니다. 계획적으로 진행해주세요!
-${oneWeekTasks.map((task) => `- ${task.title}`).join('\n')}`,
+📌 장기 프로젝트 (1주일 이상)
+${
+  oneWeekTasks.length === 0
+    ? '장기 프로젝트가 없습니다. 새로운 도전을 시작해보세요! 💪'
+    : `장기적으로 진행해야 할 프로젝트가 ${oneWeekTasks.length}개 있습니다. 계획적으로 진행해주세요!\n${oneWeekTasks
+        .map(
+          (task) =>
+            `- ${task.title} (${task.taskUserMaps.map((map) => map.user.name).join(', ')})`,
+        )
+        .join('\n')}`
+}`,
           botName: '캘린이',
           buttons: [
             {

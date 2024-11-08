@@ -47,5 +47,5 @@ export class TaskEntity extends CommonEntity {
 
   @ApiProperty({ type: [TaskUserMapEntity] })
   @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.task)
-  taskUserMaps: Promise<TaskUserMapEntity[]>;
+  taskUserMaps: TaskUserMapEntity[];
 }
