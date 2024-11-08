@@ -30,6 +30,10 @@ import { ScheduleModule } from '@nestjs/schedule';
       envFilePath: ['.env', '.env.dev'],
       isGlobal: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'wam', 'dist'), // 프론트엔드 빌드 경로
+      exclude: ['/functions*'], // '/api'로 시작하는 경로는 정적 파일 제공에서 제외
+    }),
     CacheModule.registerAsync<RedisClientOptions>({
       useFactory: async () => ({
         store: await redisStore({
@@ -42,10 +46,6 @@ import { ScheduleModule } from '@nestjs/schedule';
         }),
       }),
       isGlobal: true,
-    }),
-
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'wam', 'dist'),
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigs,

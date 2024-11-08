@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { HandleTaskRequestDto } from './task/task.dto';
+import { GetUserInfoResponseDto, HandleTaskRequestDto } from './task/task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './infra/task.entity';
 import { Repository } from 'typeorm';
@@ -20,15 +20,16 @@ export class AppService {
   }
 
   async createTask(body: HandleTaskRequestDto): Promise<void> {
+    const id = body.id ? Number(body.id) : undefined;
     const newTask = this.taskRepository.create({
-      id: Number(body.id),
+      id: id,
       taskStatus: body.taskStatus,
       title: body.title,
       contents: body.contents,
-      role: body.role,
       startDate: body.startDate,
       endDate: body.endDate,
       deletedAt: body.deletedAt,
+      channelId: Number(body.channelId),
     });
 
     const savedTask = await this.taskRepository.save(newTask);
@@ -37,17 +38,11 @@ export class AppService {
 
     const taskUserMaps = body.userIds.map((userId) => {
       return this.taskUserMapRepository.create({
-        task: Promise.resolve(savedTask),
-        user: Promise.resolve({ id: userId } as UserEntity),
+        task: savedTask,
+        user: { id: userId },
       });
     });
     await this.taskUserMapRepository.save(taskUserMaps);
-
-    await Promise.all(
-      body.userIds.map(async (userId) => {
-        await this.userRepository.increment({ id: userId }, 'totalTasks', 1);
-      }),
-    );
   }
 
   async getTaskAll(channelId: string): Promise<TaskEntity[]> {
@@ -61,13 +56,60 @@ export class AppService {
     });
   }
 
-  async getUserInfo(userId: string): Promise<UserEntity> {
-    return await this.userRepository.findOne({
+  async getUserInfo(userId: string): Promise<GetUserInfoResponseDto> {
+    const tasks = await this.taskUserMapRepository.find({
+      where: { user: { id: Number(userId) } },
+      relations: ['task'],
+    });
+
+    const user = await this.userRepository.findOne({
       where: { id: Number(userId) },
     });
+
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    const completedTasks = tasks.filter(
+      (taskUserMap) => taskUserMap.task.taskStatus === 'DONE',
+    ).length;
+    const totalTasks = tasks.length;
+
+    return {
+      id: user.id.toString(),
+      name: user.name,
+      role: user.role,
+      completedTasks: completedTasks,
+      totalTasks: totalTasks,
+      avatarUrl: user.avatarUrl,
+    };
   }
 
-  async getAllUserInfo(): Promise<UserEntity[]> {
-    return await this.userRepository.find();
+  async getAllUserInfo(): Promise<GetUserInfoResponseDto[]> {
+    const users = await this.userRepository.find();
+    const userInfoList: GetUserInfoResponseDto[] = [];
+
+    for (const user of users) {
+      const tasks = await this.taskUserMapRepository.find({
+        where: { user: { id: user.id } },
+        relations: ['task'],
+      });
+
+      const completedTasks = tasks.filter(
+        (taskUserMap) => taskUserMap.task.taskStatus === 'DONE',
+      ).length;
+      const totalTasks = tasks.length;
+
+      userInfoList.push({
+        id: user.id.toString(),
+        name: user.name,
+        role: user.role,
+        completedTasks: completedTasks,
+        totalTasks: totalTasks,
+        avatarUrl: user.avatarUrl,
+      });
+    }
+
+    return userInfoList;
   }
 }

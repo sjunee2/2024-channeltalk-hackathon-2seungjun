@@ -25,6 +25,10 @@ export class UserEntity {
   @Column({ type: 'varchar', length: 255 })
   name: string;
 
+  @ApiProperty({ description: 'User Role' })
+  @Column({ type: 'varchar', length: 255 })
+  role: string;
+
   @ApiProperty({ type: ChannelEntity })
   @ManyToOne(() => ChannelEntity, (channel) => channel.id)
   channel: ChannelEntity;
@@ -37,14 +41,6 @@ export class UserEntity {
   @ApiProperty({ description: 'User avatar url' })
   @Column()
   avatarUrl: string;
-
-  @ApiProperty({ description: 'Completed tasks' })
-  @Column({ type: 'int', default: 0 })
-  completedTasks: number;
-
-  @ApiProperty({ description: 'Total tasks' })
-  @Column({ type: 'int', default: 0 })
-  totalTasks: number;
 
   @ApiProperty({ type: [TaskUserMapEntity] })
   @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.user)

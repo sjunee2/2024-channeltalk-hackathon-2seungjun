@@ -5,9 +5,10 @@ import Filter from '../../componenets/Filter'
 import Calendar from '../../componenets/Calendar'
 import List from '../../componenets/List'
 import { isMobile } from '../../utils/userAgent'
-import { Task } from '../../types/task'
+import { Task, User } from '../../types/task'
 import { FaCalendarAlt, FaBars } from 'react-icons/fa'
 import styled from 'styled-components'
+import LeaderBoard from '../LeaderBoard'
 
 const CalendarPage = () => {
   const [taskData, setTaskData] = useState<Task[]>([])
@@ -25,7 +26,9 @@ const CalendarPage = () => {
 
   const { status, role, assignUser } = useFilterStore()
 
-  const [page, setPage] = useState<'calendar' | 'list'>('calendar')
+  const [page, setPage] = useState<'calendar' | 'list' | 'leaderBoard'>(
+    'calendar'
+  )
 
   // const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
 
@@ -179,8 +182,48 @@ const CalendarPage = () => {
   // const filteredData = useMemo(() => tas)
 
   // const roleData: Role[] = []
-  // const userData: User[] = []
-  // const myData: User = { id: '123124', role: '소유자', nickname: '2sj' }
+  const userData: User[] = [
+    {
+      id: '123124',
+      avatarUrl: 'https://avatars.githubusercontent.com/u/58812281?v=4',
+      role: '소유자',
+      name: 'halion',
+      totalTasks: 6,
+      completedTasks: 5,
+    },
+    {
+      id: '123124',
+      avatarUrl: 'https://avatars.githubusercontent.com/u/58812281?v=4',
+      role: '소유자',
+      name: '2sj',
+      totalTasks: 9,
+      completedTasks: 8,
+    },
+    {
+      id: '123124',
+      avatarUrl: 'https://avatars.githubusercontent.com/u/58812281?v=4',
+      role: '소유자',
+      name: '2ewhaejklrsj',
+      totalTasks: 6,
+      completedTasks: 10,
+    },
+    {
+      id: '123124',
+      avatarUrl: 'https://avatars.githubusercontent.com/u/58812281?v=4',
+      role: '소유자',
+      name: 'adsf',
+      totalTasks: 6,
+      completedTasks: 12,
+    },
+  ]
+  const myData: User = {
+    id: '123124',
+    avatarUrl: 'https://avatars.githubusercontent.com/u/58812281?v=4',
+    role: '소유자',
+    name: '2sj',
+    totalTasks: 6,
+    completedTasks: 5,
+  }
 
   return (
     <div
@@ -196,16 +239,21 @@ const CalendarPage = () => {
       <Wrapper>
         <ToggleWrapper>
           <ToggleButton onClick={() => {
-            setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
+            setPage('leaderBoard')
           }}>
             {page === 'calendar' ? <FaBars /> : <FaCalendarAlt />}
           </ToggleButton>
-          <Filter />
+          {page !== 'leaderBoard' && <Filter />}
         </ToggleWrapper>
         {page === 'calendar' ? (
           <Calendar taskData={filteredData} />
-        ) : (
+        ) : page === 'list' ? (
           <List taskData={filteredData} />
+        ) : (
+          <LeaderBoard
+            myData={myData}
+            userData={userData}
+          />
         )}
       </Wrapper>
     </div>

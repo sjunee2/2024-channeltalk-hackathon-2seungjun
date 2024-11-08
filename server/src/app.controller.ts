@@ -15,12 +15,12 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
-import { HandleTaskRequestDto } from './task/task.dto';
+import { GetUserInfoResponseDto, HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
 import { TaskEntity } from './infra/task.entity';
 import { UserEntity } from './infra/user.entity';
 
-@Controller('functions')
+@Controller()
 export class AppController {
   constructor(
     private readonly handlerRegistry: HandlerRegistry,
@@ -41,7 +41,7 @@ export class AppController {
     type: WamFunctionOutput,
     description: 'WAM을 쓰는 BASE API 응답입니다.',
   })
-  @Put()
+  @Put('functions')
   async handleFunction(
     @Body() body: BaseFunctionRequest<BaseFunctionInput>,
   ): Promise<BaseFunctionOutput> {
@@ -59,10 +59,27 @@ export class AppController {
     status: 201,
     type: HandleTaskRequestDto,
   })
-  @Put('task')
+  @Put('functions/task')
   async createTask(@Body() body: HandleTaskRequestDto): Promise<void> {
     try {
       await this.appService.createTask(body);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiOperation({
+    summary: '모든 유저 정보 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    type: UserEntity,
+    isArray: true,
+  })
+  @Get('functions/task/all-user')
+  async getAllUserInfo(): Promise<GetUserInfoResponseDto[]> {
+    try {
+      return await this.appService.getAllUserInfo();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
@@ -76,7 +93,7 @@ export class AppController {
     type: TaskEntity,
     isArray: true,
   })
-  @Get('task/:channelId')
+  @Get('functions/task/:channelId')
   async getTaskAll(
     @Param('channelId') channelId: string,
   ): Promise<TaskEntity[]> {
@@ -94,26 +111,12 @@ export class AppController {
     status: 200,
     type: UserEntity,
   })
-  @Get('task/user/:userId')
-  async getUserInfo(@Param('userId') userId: string): Promise<UserEntity> {
+  @Get('functions/task/user/:userId')
+  async getUserInfo(
+    @Param('userId') userId: string,
+  ): Promise<GetUserInfoResponseDto> {
     try {
       return await this.appService.getUserInfo(userId);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-  @ApiOperation({
-    summary: '모든 유저 정보 조회',
-  })
-  @ApiResponse({
-    status: 200,
-    type: UserEntity,
-    isArray: true,
-  })
-  @Get('task/all-user')
-  async getAllUserInfo(): Promise<UserEntity[]> {
-    try {
-      return await this.appService.getAllUserInfo();
     } catch (error) {
       throw new BadRequestException(error.message);
     }

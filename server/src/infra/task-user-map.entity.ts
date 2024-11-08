@@ -9,13 +9,11 @@ export class TaskUserMapEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ description: 'Task' })
   @JoinColumn({ name: 'taskId' })
-  @ManyToOne(() => TaskEntity, (task) => task.id, { lazy: true })
-  task: Promise<TaskEntity>;
+  @ManyToOne(() => TaskEntity, (task) => task.id)
+  task: TaskEntity;
 
-  @ApiProperty({ description: 'User' })
   @JoinColumn({ name: 'userId' })
-  @ManyToOne(() => UserEntity, (user) => user.id, { lazy: true })
-  user: Promise<UserEntity>;
+  @ManyToOne(() => UserEntity, (user) => user.id)
+  user: UserEntity;
 }
