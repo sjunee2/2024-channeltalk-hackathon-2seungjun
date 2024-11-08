@@ -6,15 +6,24 @@ import '@mantine/core/styles.css'
 
 import { MantineProvider } from '@mantine/core'
 import Calendar from './componenets/Calendar'
-import { Role, Task, User } from './types/task'
+import {
+  FilterStatusInterface,
+  FilterType,
+  Role,
+  Task,
+  User,
+} from './types/task'
+import { useMemo, useState } from 'react'
 
 function App() {
-  // useEffect(() => {
-  //   const appearance = getWamData('appearance')
-  //   setTheme(appearance === 'dark' ? 'dark' : 'light')
-  // }, [])
+  const [taskData, setTaskData] = useState<Task[]>([])
+  const [filterState, setFilterState] = useState<FilterStatusInterface>({
+    status: [],
+    assignUser: [],
+    role: [],
+  })
+  // const filteredData = useMemo(() => tas)
 
-  const taskData: Task[] = []
   const roleData: Role[] = []
   const userData: User[] = []
   const myData: User = { id: '123124', role: '소유자', nickname: '2sj' }
@@ -23,12 +32,7 @@ function App() {
     // <AppProvider themeName={theme}>
     <MantineProvider>
       <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Calendar
-          taskData={taskData}
-          roleData={roleData}
-          userData={userData}
-          myData={myData}
-        />
+        <Calendar taskData={taskData} />
       </div>
     </MantineProvider>
     // </AppProvider>

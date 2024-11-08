@@ -1,6 +1,8 @@
+type StatusType = 'proposal' | 'assign' | 'progress' | 'done'
+
 export interface Task {
   id: number
-  status: 'proposal' | 'assign' | 'progress' | 'done'
+  status: StatusType
   title: string
   contents: string
   startDate: string
@@ -18,4 +20,12 @@ export interface User {
 export interface Role {
   id: string
   name: string
+}
+
+export type FilterType = 'status' | 'role' | 'assignUser'
+
+export interface FilterStatusInterface {
+  status: StatusType[]
+  role: string[]
+  assignUser: string[]
 }
