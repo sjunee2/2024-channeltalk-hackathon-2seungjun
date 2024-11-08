@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository, Timestamp } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import { TaskEntity } from 'src/infra/task.entity';
 import { TaskStatus } from 'src/infra/task-status.enum';
 import { ChannelApiService } from 'src/channel-api/channelApi.service';
@@ -27,7 +27,7 @@ export class TaskScheduler {
   //   console.log(tasks);
   // }
 
-  @Cron('0 */3 * * * *')
+  @Cron('*/5 * * * *')
   // @Cron('*/10 * * * * *')
   async overallMessage() {
     const channels = await this.channelRepository.find();
