@@ -110,7 +110,7 @@ export class AppController {
     type: UserEntity,
     isArray: true,
   })
-  @Get('task/all-user')
+  @Get('task/info/all-user')
   async getAllUserInfo(): Promise<UserEntity[]> {
     try {
       return await this.appService.getAllUserInfo();

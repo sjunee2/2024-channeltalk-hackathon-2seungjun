@@ -29,7 +29,9 @@ export class AppService {
       startDate: body.startDate,
       endDate: body.endDate,
       deletedAt: body.deletedAt,
+      channelId: Number(body.channelId),
     });
+    console.log('new Task:', JSON.stringify(newTask));
 
     const savedTask = await this.taskRepository.save(newTask);
 
@@ -37,10 +39,11 @@ export class AppService {
 
     const taskUserMaps = body.userIds.map((userId) => {
       return this.taskUserMapRepository.create({
-        task: Promise.resolve(savedTask),
-        user: Promise.resolve({ id: userId } as UserEntity),
+        task: savedTask,
+        user: { id: userId },
       });
     });
+    console.log('hhhh : ' + taskUserMaps);
     await this.taskUserMapRepository.save(taskUserMaps);
 
     await Promise.all(

@@ -17,7 +17,7 @@ export class HandleTaskRequestDto {
   @ApiProperty({ description: '채널 아이디' })
   channelId: string;
 
-  @ApiProperty({ description: 'Task 상태' })
+  @ApiProperty({ description: 'Task 상태', enum: TaskStatus })
   taskStatus: TaskStatus;
 
   @ApiProperty({ description: 'Task 제목' })

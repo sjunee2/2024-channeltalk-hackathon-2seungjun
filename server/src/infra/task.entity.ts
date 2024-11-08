@@ -51,8 +51,6 @@ export class TaskEntity extends CommonEntity {
   channelId: number;
 
   @ApiProperty({ type: [TaskUserMapEntity] })
-  @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.task, {
-    lazy: true,
-  })
+  @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.task)
   taskUserMaps: Promise<TaskUserMapEntity[]>;
 }
