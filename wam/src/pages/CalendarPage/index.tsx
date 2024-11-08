@@ -36,13 +36,13 @@ const CalendarPage = () => {
     tasks: Task[],
     status: string,
     role: string,
-    assignUser: string
+    assignUser: number | null
   ) => {
     return tasks.filter(
       (task) =>
-        (status !== 'none' ? task.status === status : true) &&
+        (status !== 'none' ? task.taskStatus === status : true) &&
         (role !== 'none' ? task.role === role : true) &&
-        (assignUser !== 'none' ? task.assignUser.includes(assignUser) : true)
+        (assignUser !== null ? task.taskUserMaps.includes(assignUser) : true)
     )
   }
   const filteredData = filterTasks(taskData, status, role, assignUser)

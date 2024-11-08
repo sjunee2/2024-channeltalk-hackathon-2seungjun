@@ -14,7 +14,7 @@ const List = ({ taskData }: ListProps) => {
     gap: 10px;
     width: 100%;
   `
-  
+
   return (
     <div>
       <h2>Task List</h2>
@@ -23,19 +23,19 @@ const List = ({ taskData }: ListProps) => {
           <TaskItem
             key={task.id}
             id={task.id}
-            status={task.status}
+            taskStatus={task.taskStatus}
             title={task.title}
             contents={task.contents}
             startDate={task.startDate}
             endDate={task.endDate}
             role={task.role}
-            assignUser={task.assignUser}
+            taskUserMaps={task.taskUserMaps}
           />
         ))}
         <AddTaskItem />
       </Wrapper>
     </div>
   )
-};
+}
 
 export default List

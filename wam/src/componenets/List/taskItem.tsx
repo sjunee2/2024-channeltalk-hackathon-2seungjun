@@ -7,22 +7,22 @@ import { BASE_URL } from '../../secret'
 
 const TaskItem = ({
   id,
-  status,
+  taskStatus,
   title,
   contents,
   startDate,
   endDate,
-  assignUser,
+  taskUserMaps,
 }: Task) => {
-  const [task, setTask] = useState({
+  const [task, setTask] = useState<Task>({
     id: id,
-    status: status,
+    taskStatus: taskStatus,
     title: title,
     contents: contents,
     startDate: startDate,
     endDate: endDate,
     role: 'manager',
-    assignUser: assignUser,
+    taskUserMaps: taskUserMaps,
   })
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -44,13 +44,13 @@ const TaskItem = ({
       body: JSON.stringify({
         id: task.id,
         channelId,
-        taskStatus: task.status,
+        taskStatus: task.taskStatus,
         title: task.title,
         contents: task.contents,
         role: task.role,
         startDate: task.startDate,
         endDate: task.endDate,
-        userIds: task.assignUser,
+        userIds: task.taskUserMaps,
         deleteAt: new Date().getTime(),
       }),
     })
@@ -62,7 +62,7 @@ const TaskItem = ({
   }
 
   const onStatusClick = () => {
-    const oldStatus = task.status
+    const oldStatus = task.taskStatus
     const newStatus =
       oldStatus === 'proposal'
         ? 'progress'
@@ -79,7 +79,7 @@ const TaskItem = ({
 
   const onStatusRightClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    const oldStatus = task.status
+    const oldStatus = task.taskStatus
     const newStatus =
       oldStatus === 'done'
         ? 'progress'
@@ -100,7 +100,7 @@ const TaskItem = ({
 
   const onAssignUserRightClick = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault()
-    if (task.assignUser) {
+    if (task.taskUserMaps) {
       setTask((prevTask) => ({
         ...prevTask,
         assignUser: [],
@@ -119,13 +119,13 @@ const TaskItem = ({
       body: JSON.stringify({
         id: task.id,
         channelId,
-        taskStatus: task.status,
+        taskStatus: task.taskStatus,
         title: task.title,
         contents: task.contents,
         role: task.role,
         startDate: task.startDate,
         endDate: task.endDate,
-        userIds: task.assignUser,
+        userIds: task.taskUserMaps,
         deleteAt: null,
       }),
     })
@@ -138,14 +138,14 @@ const TaskItem = ({
         onClick={onStatusClick}
         onContextMenu={onStatusRightClick}
       >
-        {task.status}
+        {task.taskStatus}
       </CustomButton>
       <CustomButton
         name="assignUser"
         onClick={onAssignUserClick}
         onContextMenu={onAssignUserRightClick}
       >
-        {task.assignUser}
+        {task.taskUserMaps[0]}
       </CustomButton>
       <CustomInput
         name="role"

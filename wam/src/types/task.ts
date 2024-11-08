@@ -2,19 +2,19 @@ type StatusType = 'proposal' | 'assign' | 'progress' | 'done'
 
 export interface Task {
   id: number
-  status: StatusType
+  taskStatus: StatusType
   title: string
   contents: string
   startDate: string
   endDate: string
   role: string
-  assignUser: string[]
+  taskUserMaps: number[]
 }
 
 export interface User {
   id: string
-  role: string
   name: string
+  role: string
   completedTasks: number
   totalTasks: number
   avatarUrl: string

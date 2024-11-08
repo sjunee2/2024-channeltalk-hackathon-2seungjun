@@ -1,11 +1,10 @@
-import { Select } from '@mantine/core';
-import { useFilterStore } from '../../store/filter';
-import styled from 'styled-components';
-import './select.css';
+import { Select } from '@mantine/core'
+import { useFilterStore } from '../../store/filter'
+import styled from 'styled-components'
+import './select.css'
 
 const Filter = () => {
-
-  const { setStatus, setRole, setAssignUser } = useFilterStore();
+  const { setStatus, setRole, setAssignUser } = useFilterStore()
 
   return (
     <Wrapper>
@@ -16,7 +15,7 @@ const Filter = () => {
         defaultValue={'none'}
         searchable
         nothingFoundMessage="Nothing found..."
-        onChange = {(value) => value !== null && setStatus(value)}
+        onChange={(value) => value !== null && setStatus(value)}
       />
       <Select
         label="role"
@@ -25,7 +24,7 @@ const Filter = () => {
         defaultValue={'none'}
         searchable
         nothingFoundMessage="Nothing found..."
-        onChange = {(value) => value !== null && setRole(value)}
+        onChange={(value) => value !== null && setRole(value)}
       />
       <Select
         label="assignUser"
@@ -34,17 +33,16 @@ const Filter = () => {
         defaultValue={'none'}
         searchable
         nothingFoundMessage="Nothing found..."
-        onChange = {(value) => value !== null && setAssignUser(value)}
+        onChange={(value) => value !== null && setAssignUser(Number(value))}
       />
     </Wrapper>
-  );
-};
+  )
+}
 
 const Wrapper = styled.div`
-display: flex;
-flex-direction: row;
-gap: 16px;
-`;
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+`
 
-
-export default Filter;
+export default Filter
