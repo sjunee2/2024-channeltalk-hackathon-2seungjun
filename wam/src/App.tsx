@@ -4,9 +4,9 @@ import '@mantine/core/styles.css'
 import CalendarPage from './pages/CalendarPage'
 import { AppProvider } from '@channel.io/bezier-react'
 import { MantineProvider } from '@mantine/core'
-import { useAppIdStore } from './store/appId'
-import { useMemo, useEffect } from 'react'
-import { getWamData, setSize } from './utils/wam'
+// import { useAppIdStore } from './store/appId'
+// import { useMemo, useEffect } from 'react'
+// import { getWamData, setSize } from './utils/wam'
 
 function App() {
   // const appId = useMemo(() => getWamData('appId') ?? '', [])

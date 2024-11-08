@@ -14,7 +14,10 @@ export interface Task {
 export interface User {
   id: string
   role: string
-  nickname: string
+  name: string
+  completedTasks: number
+  totalTasks: number
+  avatarUrl: string
 }
 
 export interface Role {
