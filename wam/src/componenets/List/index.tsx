@@ -14,9 +14,40 @@ const List = ({ taskData, roleData, userData, myData }: ListProps) => {
       <ul>
         {taskData.map((task) => (
           <li key={task.id}>
-            {task.title} - {task.contents}
+            <div>
+              {task.status} * {task.assignUser.join(', ')}
+            </div>
+            <div>
+              {task.role}
+            </div>
+            <div>
+              {task.startDate} ~ {task.endDate}
+            </div>
+            <div>
+              {task.title}
+            </div>
+            <div>
+              {task.contents}
+            </div>
           </li>
         ))}
+        <div>
+          {roleData.map((role) => (
+            <div key={role.id}>
+              {role.name}
+            </div>
+          ))}
+        </div>
+        <div>
+          {userData.map((user) => (
+            <div key={user.id}>
+              {user.nickname}
+            </div>
+          ))}
+        </div>
+        <div>
+          {myData.nickname}
+        </div>
       </ul>
     </div>
   )
