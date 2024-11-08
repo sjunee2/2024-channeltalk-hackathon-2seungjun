@@ -12,9 +12,15 @@ import { redisStore } from 'cache-manager-redis-yet';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmConfigs } from 'src/infra/config';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      envFilePath: ['.env', '.env.dev'],
+      isGlobal: true,
+    }),
     CacheModule.registerAsync<RedisClientOptions>({
       useFactory: async () => ({
         store: await redisStore({
@@ -34,16 +40,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
     }),
 
     TypeOrmModule.forRootAsync({
-      useFactory: () => ({
-        type: 'mysql',
-        host: process.env.DATABASE_HOST,
-        port: Number(process.env.DATABASE_PORT),
-        username: process.env.DATABASE_USERNAME,
-        password: process.env.DATABASE_PASSWORD,
-        database: process.env.DATABASE_DATABASE,
-        entities: [__dirname + '/../**/*.entity{.ts,.js}'],
-        synchronize: Boolean(process.env.DATABASE_SYNCHRO),
-      }),
+      useClass: TypeOrmConfigs,
     }),
   ],
   controllers: [AppController],
