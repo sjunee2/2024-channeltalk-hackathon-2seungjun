@@ -1,6 +1,6 @@
 import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
 import { UserType } from 'src/infra/user.enums';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('user')
 export class UserEntity {
