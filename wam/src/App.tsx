@@ -4,7 +4,8 @@ import { isMobile } from './utils/userAgent'
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css'
 
-import { Input, MantineProvider } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
+import Calendar from './componenets/Calendar'
 
 function App() {
   // useEffect(() => {
@@ -16,7 +17,7 @@ function App() {
     // <AppProvider themeName={theme}>
     <MantineProvider>
       <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Input />
+        <Calendar />
       </div>
     </MantineProvider>
     // </AppProvider>

@@ -15,4 +15,12 @@ module.exports = {
       { allowConstantExport: true },
     ],
   },
+  overrides: [
+    {
+      files: ['*.config.cjs'],
+      env: {
+        node: true,
+      },
+    },
+  ],
 }
