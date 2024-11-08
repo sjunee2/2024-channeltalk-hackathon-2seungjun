@@ -18,6 +18,7 @@ import {
 import { HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
 import { TaskEntity } from './infra/task.entity';
+import { UserEntity } from './infra/user.entity';
 
 @Controller('functions')
 export class AppController {
@@ -66,6 +67,24 @@ export class AppController {
   ): Promise<TaskEntity[]> {
     try {
       return await this.appService.getTaskAll(channelId);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('task/user/:userId')
+  async getUserInfo(@Param('userId') userId: string): Promise<UserEntity> {
+    try {
+      return await this.appService.getUserInfo(userId);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('task/all-user')
+  async getAllUserInfo(): Promise<UserEntity[]> {
+    try {
+      return await this.appService.getAllUserInfo();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
