@@ -135,8 +135,8 @@ const CalendarPage = () => {
           }}
         />
         <Filter />
+        {page === 'calendar' ? (
           <Calendar taskData={filteredData} />
-          <Calendar taskData={taskData} />
         ) : (
           <List taskData={filteredData} />
         )}
