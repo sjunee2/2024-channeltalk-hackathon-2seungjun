@@ -30,22 +30,45 @@ export class Context {
 }
 
 // 기본 파라미터 인터페이스
-interface BaseParams {
+export interface BaseParams {
   chat?: {
     type: string;
     id: string;
-    // ... 필요한 chat 관련 필드들
+    [key: string]: any; // 다른 최상위 객체들도 자유롭게 추가 가능
   };
   trigger?: {
     type: string;
     attributes: object;
+    [key: string]: any; // 다른 최상위 객체들도 자유롭게 추가 가능
   };
-  input?: object;
+  input?: any;
+  [key: string]: any; // 다른 최상위 객체들도 자유롭게 추가 가능
 }
 
 export class BaseFunctionRequest<T = any> {
+  private constructor() {}
+
+  static createNew(body: BaseFunctionRequest): BaseFunctionRequest {
+    const newRequest = new BaseFunctionRequest();
+    newRequest.context = body.context;
+    newRequest.params = body.params;
+    return newRequest;
+  }
+
+  public addParams(params: BaseParams) {
+    this.params = { ...this.params, ...params };
+  }
+
+  public addContext(context: Context) {
+    this.context = { ...this.context, ...context };
+  }
+
+  public setMethod(method: string) {
+    this.method = method;
+  }
+
   @ApiProperty()
-  readonly method: string;
+  method: string;
 
   @ApiProperty({ type: () => Object })
   params: BaseParams & T; // 기본 파라미터와 제네릭 타입을 합침

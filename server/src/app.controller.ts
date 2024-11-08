@@ -9,7 +9,7 @@ import {
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
 
-@Controller('function')
+@Controller('functions')
 export class AppController {
   constructor(private readonly handlerRegistry: HandlerRegistry) {}
 

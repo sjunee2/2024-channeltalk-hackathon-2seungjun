@@ -4,7 +4,9 @@ import { isMobile } from './utils/userAgent'
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css'
 
-import { Input, MantineProvider } from '@mantine/core'
+import { MantineProvider } from '@mantine/core'
+import Calendar from './componenets/Calendar'
+import { Role, Task, User } from './types/task'
 
 function App() {
   // useEffect(() => {
@@ -12,11 +14,21 @@ function App() {
   //   setTheme(appearance === 'dark' ? 'dark' : 'light')
   // }, [])
 
+  const taskData: Task[] = []
+  const roleData: Role[] = []
+  const userData: User[] = []
+  const myData: User = { id: '123124', role: '소유자', nickname: '2sj' }
+
   return (
     // <AppProvider themeName={theme}>
     <MantineProvider>
       <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Input />
+        <Calendar
+          taskData={taskData}
+          roleData={roleData}
+          userData={userData}
+          myData={myData}
+        />
       </div>
     </MantineProvider>
     // </AppProvider>
