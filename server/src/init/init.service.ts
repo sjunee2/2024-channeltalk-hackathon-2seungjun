@@ -7,7 +7,6 @@ import { HandlerService } from 'src/common/service/handler.service';
 import { ChannelEntity } from 'src/infra/channel.entity';
 import { UserEntity } from 'src/infra/user.entity';
 import { TaskInput, TaskOutput } from 'src/task/task.dto';
-import { TASK } from 'src/task/task.service';
 import { Repository } from 'typeorm';
 
 export const INIT = 'init';
@@ -70,7 +69,7 @@ export class InitService
                 attributes: {
                   appId: this.appId,
                   clientId: body.context.caller.id,
-                  name: 'calendar',
+                  name: '',
                   params: {},
                 },
               },

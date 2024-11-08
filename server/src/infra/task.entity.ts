@@ -15,31 +15,31 @@ import { ChannelEntity } from 'src/infra/channel.entity';
 
 @Entity('task')
 export class TaskEntity extends CommonEntity {
-  @ApiProperty({ description: 'Task 아이디' })
+  @ApiProperty({ type: 'number', description: 'Task 아이디' })
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty({ description: 'Task 상태' })
+  @ApiProperty({ type: 'string', description: 'Task 상태' })
   @Column()
   taskStatus: TaskStatus;
 
-  @ApiProperty({ description: 'Task 제목' })
+  @ApiProperty({ type: 'string', description: 'Task 제목' })
   @Column('varchar')
   title: string;
 
-  @ApiProperty({ description: 'Task 내용' })
+  @ApiProperty({ type: 'string', description: 'Task 내용' })
   @Column('varchar')
   contents: string;
 
-  @ApiProperty({ description: '역할' })
+  @ApiProperty({ type: 'string', description: '역할' })
   @Column('varchar')
   role: string;
 
-  @ApiProperty({ description: '시작일' })
+  @ApiProperty({ type: 'string', description: '시작일' })
   @Column('timestamp')
   startDate: Timestamp;
 
-  @ApiProperty({ description: '종료일' })
+  @ApiProperty({ type: 'string', description: '종료일' })
   @Column('timestamp')
   endDate: Timestamp;
 
