@@ -85,9 +85,9 @@ export class ChannelApiService {
   /**
    * 외부 API에 커맨드를 등록하는 함수
    */
-  async registerCommandToChannel(command: Command) {
+  async registerCommandToChannel(commands: Command[]) {
     try {
-      this.logger.log(`Registering command: ${command.name}`);
+      this.logger.log(`Registering command`);
       const requestTokens = await this.tokenService.getChannelToken();
       await this.axiosInstance.put(
         'https://app-store-api.channel.io/general/v1/native/functions',
@@ -95,7 +95,7 @@ export class ChannelApiService {
           method: 'registerCommands',
           params: {
             AppID: this.appId,
-            Commands: [command],
+            Commands: commands,
           },
         },
         {
@@ -105,12 +105,9 @@ export class ChannelApiService {
           },
         },
       );
-      this.logger.log(`Command registered successfully: ${command.name}`);
+      this.logger.log(`Command registered successfully`);
     } catch (error) {
-      this.logger.error(
-        `Failed to register command: ${command.name}`,
-        error.stack,
-      );
+      this.logger.error(`Failed to register command`, error.stack);
       throw new Error(error);
     }
   }

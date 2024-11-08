@@ -18,7 +18,7 @@ export class Caller {
   type: CallerType;
 
   @ApiProperty()
-  id: number;
+  id: string;
 }
 
 export class Context {
@@ -68,10 +68,10 @@ export class BaseFunctionRequest<T = any> {
   }
 
   @ApiProperty()
-  method: string;
+  method?: string;
 
   @ApiProperty({ type: () => Object })
-  params: BaseParams & T; // 기본 파라미터와 제네릭 타입을 합침
+  params?: BaseParams & T; // 기본 파라미터와 제네릭 타입을 합침
 
   @ApiProperty({ type: () => Context, required: false })
   context?: Context;
@@ -99,6 +99,9 @@ export class GeneralFunctionOutput extends BaseFunctionOutput {
 export class WamAttributes {
   @ApiProperty({ description: 'app-tutorial의 app id' })
   appId: string;
+
+  @ApiProperty({ description: 'client id' })
+  clientId: string;
 
   @ApiProperty()
   name: string;
