@@ -27,8 +27,8 @@ export class TaskScheduler {
   //   console.log(tasks);
   // }
 
-  @Cron('*/5 * * * *')
-  // @Cron('*/10 * * * * *')
+  // @Cron('*/5 * * * *')
+  @Cron('*/10 * * * * *')
   async overallMessage() {
     const channels = await this.channelRepository.find();
     for (const channel of channels) {
@@ -39,27 +39,24 @@ export class TaskScheduler {
           channelId: channel.id,
         },
       });
+      console.log(tasks);
 
       const now = new Date();
       const ONE_DAY = 24 * 60 * 60 * 1000;
-
-      // 1일 남은 일
+      // 1일 이내 남은 일
       const oneDayTasks = tasks.filter((task) => {
         const endDate = task.endDate;
         const diffTime = endDate.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / ONE_DAY);
-        console.log(
-          `Task: ${task.title}, EndDate: ${endDate}, DiffDays: ${diffDays}`,
-        );
-        return diffDays === 1;
+        return diffDays <= 1;
       });
 
-      // 3일 남은 일
+      // 1일~3일 남은 일
       const threeDayTasks = tasks.filter((task) => {
         const endDate = task.endDate;
         const diffTime = endDate.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / ONE_DAY);
-        return diffDays === 3;
+        return diffDays > 1 && diffDays <= 3;
       });
 
       // 1주 이상 남은 일
@@ -88,10 +85,9 @@ export class TaskScheduler {
         rootMessageId: undefined,
         dto: {
           plainText: `📅 ${channel.name}의 ${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월 ${new Date().getDate()}일 할 일 현황을 알려드립니다 📅
-ㅅ
 🚨 긴급 처리가 필요한 일정 (1일 이내 마감)
 현재 긴급하게 처리해야 할 일정이 ${oneDayTasks.length}개 있습니다. 서둘러 확인해주세요!
-${oneDayTasks.map((task) => `- ${task.title}`).join('\n')}
+${oneDayTasks.map((task) => `- ${task.title}${task.taskUserMaps}`).join('\n')}
 
 ⚠️ 주의가 필요한 일정 (3일 이내 마감)
 앞으로 3일 안에 처리해야 할 일정이 ${threeDayTasks.length}개 있습니다. 미리미리 준비해주세요.

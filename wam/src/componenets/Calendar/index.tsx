@@ -3,7 +3,6 @@ import { Task } from '../../types/task'
 import { format, addMonths, subMonths } from 'date-fns'
 import styled from 'styled-components'
 import { groupDatesByWeek } from './groupDatesByWeek'
-import { Button } from '@mantine/core'
 import { colorsArray } from './colors'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
@@ -99,9 +98,15 @@ const Calendar = ({ taskData }: CalendarProps) => {
   return (
     <Wrapper>
       <ButtonWrapper>
-        <FaChevronLeft style={{width: '16px', height: '16px'}} onClick={toPrevMonth}></FaChevronLeft>
+        <FaChevronLeft
+          style={{ width: '16px', height: '16px' }}
+          onClick={toPrevMonth}
+        ></FaChevronLeft>
         <h1>{`${format(curDate, 'yyyy')}년 ${format(curDate, 'M')}월`}</h1>
-        <FaChevronRight style={{width: '16px', height: '16px'}} onClick={toNextMonth}></FaChevronRight>
+        <FaChevronRight
+          style={{ width: '16px', height: '16px' }}
+          onClick={toNextMonth}
+        ></FaChevronRight>
       </ButtonWrapper>
       <DateListContainer>
         {dayList.map((val) => (

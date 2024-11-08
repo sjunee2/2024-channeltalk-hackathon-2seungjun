@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useFilterStore } from '../../store/filter'
-import { Button } from '@channel.io/bezier-react'
 import Filter from '../../componenets/Filter'
 import Calendar from '../../componenets/Calendar'
 import List from '../../componenets/List'
@@ -13,16 +12,19 @@ import LeaderBoard from '../LeaderBoard'
 const CalendarPage = () => {
   const [taskData, setTaskData] = useState<Task[]>([])
   useEffect(() => {
-    setTaskData([{
-      id: 1,
-      status: 'proposal',
-      title: 'title',
-      contents: 'contents',
-      startDate: '2021-09-01',
-      endDate: '2024-09-10',
-      role: 'owner',
-      assignUser: ['123'],
-    }])}, [])
+    setTaskData([
+      {
+        id: 1,
+        status: 'proposal',
+        title: 'title',
+        contents: 'contents',
+        startDate: '2021-09-01',
+        endDate: '2024-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+    ])
+  }, [])
 
   const { status, role, assignUser } = useFilterStore()
 
@@ -238,9 +240,11 @@ const CalendarPage = () => {
     >
       <Wrapper>
         <ToggleWrapper>
-          <ToggleButton onClick={() => {
-            setPage('leaderBoard')
-          }}>
+          <ToggleButton
+            onClick={() => {
+              setPage('leaderBoard')
+            }}
+          >
             {page === 'calendar' ? <FaBars /> : <FaCalendarAlt />}
           </ToggleButton>
           {page !== 'leaderBoard' && <Filter />}
@@ -261,34 +265,33 @@ const CalendarPage = () => {
 }
 
 const ToggleWrapper = styled.div`
-padding-top: 10px;
-display: flex;
-flex-direction: row;
-gap: 60px;
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+  gap: 60px;
 `
 
 const ToggleButton = styled.div`
-height: 40px;
-width: 40px;
-border-radius: 10px;
+  height: 40px;
+  width: 40px;
+  border-radius: 10px;
 
-display: flex;
-justify-content: center;
-align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-svg {
-  color: #4A4F5A;
-  font-size: 24px;
-  transition: transform 0.3s ease;
-}
+  svg {
+    color: #4a4f5a;
+    font-size: 24px;
+    transition: transform 0.3s ease;
+  }
 `
 
 const Wrapper = styled.div`
-display: flex;
-flex-direction: column;
-gap: 10px;
-width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
 `
-
 
 export default CalendarPage
