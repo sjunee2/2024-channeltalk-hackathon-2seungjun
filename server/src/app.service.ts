@@ -37,8 +37,8 @@ export class AppService {
 
     const taskUserMaps = body.userIds.map((userId) => {
       return this.taskUserMapRepository.create({
-        task: savedTask,
-        user: { id: userId },
+        task: Promise.resolve(savedTask),
+        user: Promise.resolve({ id: userId } as UserEntity),
       });
     });
     await this.taskUserMapRepository.save(taskUserMaps);
