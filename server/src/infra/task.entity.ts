@@ -31,10 +31,6 @@ export class TaskEntity extends CommonEntity {
   @Column('varchar')
   contents: string;
 
-  @ApiProperty({ type: 'string', description: '역할' })
-  @Column('varchar')
-  role: string;
-
   @ApiProperty({ type: 'string', description: '시작일' })
   @Column('timestamp')
   startDate: Timestamp;

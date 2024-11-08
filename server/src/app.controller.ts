@@ -15,7 +15,7 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
-import { HandleTaskRequestDto } from './task/task.dto';
+import { GetUserInfoResponseDto, HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
 import { TaskEntity } from './infra/task.entity';
 import { UserEntity } from './infra/user.entity';
@@ -95,7 +95,9 @@ export class AppController {
     type: UserEntity,
   })
   @Get('functions/task/user/:userId')
-  async getUserInfo(@Param('userId') userId: string): Promise<UserEntity> {
+  async getUserInfo(
+    @Param('userId') userId: string,
+  ): Promise<GetUserInfoResponseDto> {
     try {
       return await this.appService.getUserInfo(userId);
     } catch (error) {
@@ -111,7 +113,7 @@ export class AppController {
     isArray: true,
   })
   @Get('functions/task/all-user')
-  async getAllUserInfo(): Promise<UserEntity[]> {
+  async getAllUserInfo(): Promise<GetUserInfoResponseDto[]> {
     try {
       return await this.appService.getAllUserInfo();
     } catch (error) {

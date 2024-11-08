@@ -4,7 +4,7 @@ import {
   BaseFunctionOutput,
 } from 'src/common/interfaces/function.interface';
 import { TaskStatus } from 'src/infra/task-status.enum';
-import { Timestamp } from 'typeorm';
+import { Column, Timestamp } from 'typeorm';
 
 export class TaskInput extends BaseFunctionInput {}
 
@@ -40,4 +40,24 @@ export class HandleTaskRequestDto {
 
   @ApiProperty({ type: 'string', description: '삭제일자' })
   deletedAt: Timestamp | null;
+}
+
+export class GetUserInfoResponseDto {
+  @ApiProperty({ description: 'Task 아이디' })
+  id: string;
+
+  @ApiProperty({ description: '이름' })
+  name: string;
+
+  @ApiProperty({ description: '역할' })
+  role: string;
+
+  @ApiProperty({ description: 'Completed tasks' })
+  completedTasks: number;
+
+  @ApiProperty({ description: 'Total tasks' })
+  totalTasks: number;
+
+  @ApiProperty({ description: 'Avatar url' })
+  avatarUrl: string;
 }
