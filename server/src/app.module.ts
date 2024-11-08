@@ -14,6 +14,12 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigs } from 'src/infra/config';
 import { ConfigModule } from '@nestjs/config';
+import { TASK, TaskService } from 'src/task/task.service';
+import { TaskEntity } from 'src/infra/task.entity';
+import { UserEntity } from 'src/infra/user.entity';
+import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
+import { INIT, InitService } from 'src/init/init.service';
+import { ChannelEntity } from 'src/infra/channel.entity';
 
 @Module({
   imports: [
@@ -38,10 +44,15 @@ import { ConfigModule } from '@nestjs/config';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'wam', 'dist'),
     }),
-
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigs,
     }),
+    TypeOrmModule.forFeature([
+      TaskEntity,
+      UserEntity,
+      TaskUserMapEntity,
+      ChannelEntity,
+    ]),
   ],
   controllers: [AppController],
   providers: [
@@ -50,6 +61,8 @@ import { ConfigModule } from '@nestjs/config';
     TokenService,
     ChannelApiService,
     TutorialService,
+    TaskService,
+    InitService,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: HttpInterceptorService,
@@ -63,12 +76,23 @@ export class AppModule implements OnModuleInit {
     private readonly handlerRegistry: HandlerRegistry,
     private readonly channelApiService: ChannelApiService,
     private readonly tutorialService: TutorialService,
+    private readonly taskService: TaskService,
+    private readonly initService: InitService,
   ) {}
 
   async onModuleInit() {
     try {
       this.logger.log('Registering TutorialService handler...');
       this.handlerRegistry.registerHandler(TUTORIAL, this.tutorialService);
+      this.handlerRegistry.registerHandler(TASK, this.taskService);
+      this.handlerRegistry.registerHandler(INIT, this.initService);
+      if (process.env.SYNCHO_COMMAND === 'true') {
+        await this.channelApiService.registerCommandToChannel([
+          this.tutorialService.command,
+          this.taskService.command,
+          this.initService.command,
+        ]);
+      }
     } catch (error) {
       this.logger.error('Failed to initialize module', error.stack);
       throw error;

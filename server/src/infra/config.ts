@@ -16,7 +16,7 @@ export class TypeOrmConfigs implements TypeOrmOptionsFactory {
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
       synchronize: Boolean(process.env.DATABASE_SYNCHRO),
       retryAttempts: 3,
-      logging: process.env.NODE_ENV === 'development',
+      logging: true,
     };
   }
 }
