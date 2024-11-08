@@ -11,6 +11,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -29,7 +30,18 @@ import { join } from 'path';
     }),
 
     ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', '..', 'wam', 'dist'), // 'view' 폴더의 빌드 결과물 경로 설정
+      rootPath: join(__dirname, '..', '..', 'wam', 'dist'),
+    }),
+
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: process.env.DATABASE_HOST,
+      port: Number(process.env.DATABASE_PORT),
+      username: process.env.USERNAME,
+      password: process.env.PASSWWORD,
+      database: process.env.DATABASE,
+      entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+      synchronize: Boolean(process.env.SYNCHRO),
     }),
   ],
   controllers: [AppController],
