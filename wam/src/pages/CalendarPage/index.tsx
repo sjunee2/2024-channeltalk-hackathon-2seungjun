@@ -244,7 +244,11 @@ const CalendarPage = () => {
         <ToggleWrapper>
           <ToggleButton
             onClick={() => {
-              setPage('leaderBoard')
+              setPage((prev) => {
+                if (prev === 'calendar') return 'list'
+                else if (prev === 'list') return 'leaderBoard'
+                else return 'calendar'
+              })
             }}
           >
             {page === 'calendar' ? <FaBars /> : <FaCalendarAlt />}
