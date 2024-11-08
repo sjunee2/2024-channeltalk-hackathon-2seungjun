@@ -8,15 +8,74 @@ import { Button, MantineProvider } from '@mantine/core'
 import Calendar from './componenets/Calendar'
 import Filter from './componenets/Filter'
 import List from './componenets/List'
-import { Role, Task, User } from './types/task'
+import { Task } from './types/task'
 import { useEffect, useState } from 'react'
 import { useFilterStore } from './store/filter'
+import { AppProvider } from '@channel.io/bezier-react'
 
 function App() {
   const [taskData, setTaskData] = useState<Task[]>([])
   const { status, role, assignUser } = useFilterStore()
 
   const [page, setPage] = useState<'calendar' | 'list'>('calendar')
+
+  // const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
+
+  // const appId = useMemo(() => getWamData('appId') ?? '', [])
+  // const channelId = useMemo(() => getWamData('channelId') ?? '', [])
+  // const managerId = useMemo(() => getWamData('managerId') ?? '', [])
+  // const message = useMemo(() => getWamData('message') ?? '', [])
+  // const chatId = useMemo(() => getWamData('chatId') ?? '', [])
+  // const chatType = useMemo(() => getWamData('chatType') ?? '', [])
+  // const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
+  // const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
+
+  // const handleSend = useCallback(
+  //   async (sender: string): Promise<void> => {
+  //     if (chatType === 'group') {
+  //       switch (sender) {
+  //         case 'bot':
+  //           await callFunction(appId, 'sendAsBot', {
+  //             input: {
+  //               groupId: chatId,
+  //               broadcast,
+  //               rootMessageId,
+  //             },
+  //           })
+  //           break
+  //         case 'manager':
+  //           await callNativeFunction('writeGroupMessageAsManager', {
+  //             channelId,
+  //             groupId: chatId,
+  //             rootMessageId,
+  //             broadcast,
+  //             dto: {
+  //               plainText: message,
+  //               managerId,
+  //             },
+  //           })
+  //           break
+  //         default:
+  //           // NOTE: should not reach here
+  //           console.error('Invalid message sender')
+  //       }
+  //     } else if (chatType === 'directChat') {
+  //       // FIXME: Implement
+  //     } else if (chatType === 'userChat') {
+  //       // FIXME: Implement
+  //     }
+  //   },
+  //   [
+  //     appId,
+  //     broadcast,
+  //     channelId,
+  //     chatId,
+  //     chatType,
+  //     managerId,
+  //     message,
+  //     rootMessageId,
+  //   ]
+  // )
 
   useEffect(() => {
     setTaskData([
@@ -59,39 +118,41 @@ function App() {
 
   // const filteredData = useMemo(() => tas)
 
-  const roleData: Role[] = []
-  const userData: User[] = []
-  const myData: User = { id: '123124', role: '소유자', nickname: '2sj' }
+  // const roleData: Role[] = []
+  // const userData: User[] = []
+  // const myData: User = { id: '123124', role: '소유자', nickname: '2sj' }
 
   return (
-    // <AppProvider themeName={theme}>
-    <MantineProvider>
-      <div
-        style={{
-          width: '800px',
-          height: '700px',
-          backgroundColor: 'whiteSmoke',
-          display: 'flex',
-          justifyContent: 'center',
-          padding: isMobile() ? '16px' : '0 24px 24px 24px',
-        }}
-      >
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-          <Button
-            onClick={() => {
-              setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
-            }}
-          />
-          <Filter />
-          {page === 'calendar' ? (
-            <Calendar taskData={taskData} />
-          ) : (
-            <List taskData={filterTasks(taskData, status, role, assignUser)} />
-          )}
+    <AppProvider>
+      <MantineProvider>
+        <div
+          style={{
+            width: '800px',
+            height: '700px',
+            backgroundColor: 'whiteSmoke',
+            display: 'flex',
+            justifyContent: 'center',
+            padding: isMobile() ? '16px' : '0 24px 24px 24px',
+          }}
+        >
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <Button
+              onClick={() => {
+                setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
+              }}
+            />
+            <Filter />
+            {page === 'calendar' ? (
+              <Calendar taskData={taskData} />
+            ) : (
+              <List
+                taskData={filterTasks(taskData, status, role, assignUser)}
+              />
+            )}
+          </div>
         </div>
-      </div>
-    </MantineProvider>
-    // </AppProvider>
+      </MantineProvider>
+    </AppProvider>
   )
 }
 
