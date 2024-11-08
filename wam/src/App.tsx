@@ -6,6 +6,7 @@ import '@mantine/core/styles.css'
 
 import { MantineProvider } from '@mantine/core'
 import Calendar from './componenets/Calendar'
+import { Task, User } from './types/task'
 
 function App() {
   // useEffect(() => {
@@ -13,11 +14,16 @@ function App() {
   //   setTheme(appearance === 'dark' ? 'dark' : 'light')
   // }, [])
 
+  const taskData: Task[] = []
+  const roleData: Role[] = []
+  const userData: User[] = []
+  const myData: User = {}
+
   return (
     // <AppProvider themeName={theme}>
     <MantineProvider>
       <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
-        <Calendar />
+        <Calendar taskData={taskData} />
       </div>
     </MantineProvider>
     // </AppProvider>
