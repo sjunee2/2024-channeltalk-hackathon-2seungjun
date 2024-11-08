@@ -1,10 +1,11 @@
 export interface Task {
   id: number
-  status: string
+  status: 'proposal' | 'assign' | 'progress' | 'done'
   contents: string
   startDate: string
   endDate: string
   role: string
+  assignUser: string[]
 }
 
 export interface User {
