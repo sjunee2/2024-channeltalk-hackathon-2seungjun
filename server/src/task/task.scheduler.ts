@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Not, Repository } from 'typeorm';
+import { Not, Repository, Timestamp } from 'typeorm';
 import { TaskEntity } from 'src/infra/task.entity';
 import { TaskStatus } from 'src/infra/task-status.enum';
 import { ChannelApiService } from 'src/channel-api/channelApi.service';
@@ -39,30 +39,37 @@ export class TaskScheduler {
           channelId: channel.id,
         },
       });
+
+      const now = new Date();
+      const ONE_DAY = 24 * 60 * 60 * 1000; // 1일을 밀리초로
+
       // 1일 남은 일
       const oneDayTasks = tasks.filter((task) => {
-        const startDate = Number(task.startDate);
-        const endDate = Number(task.endDate);
-        const diffTime = endDate - startDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const endDate = new Date(task.endDate.toString());
+        const diffTime = endDate.valueOf() - now.valueOf();
+        const diffDays = Math.ceil(diffTime / ONE_DAY);
+        console.log(
+          `Task: ${task.title}, EndDate: ${endDate}, DiffDays: ${diffDays}`,
+        );
         return diffDays === 1;
       });
+
       // 3일 남은 일
       const threeDayTasks = tasks.filter((task) => {
-        const startDate = Number(task.startDate);
-        const endDate = Number(task.endDate);
-        const diffTime = endDate - startDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const endDate = new Date(task.endDate.toString());
+        const diffTime = endDate.valueOf() - now.valueOf();
+        const diffDays = Math.ceil(diffTime / ONE_DAY);
         return diffDays === 3;
       });
+
       // 1주 이상 남은 일
       const oneWeekTasks = tasks.filter((task) => {
-        const startDate = Number(task.startDate);
-        const endDate = Number(task.endDate);
-        const diffTime = endDate - startDate;
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const endDate = new Date(task.endDate.toString());
+        const diffTime = endDate.valueOf() - now.valueOf();
+        const diffDays = Math.ceil(diffTime / ONE_DAY);
         return diffDays >= 7;
       });
+
       const request = BaseFunctionRequest.createNew({
         context: {
           channel: {
