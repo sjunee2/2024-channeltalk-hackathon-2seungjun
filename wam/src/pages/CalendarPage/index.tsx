@@ -16,14 +16,14 @@ const CalendarPage = () => {
 
   // const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
 
-  // const appId = useMemo(() => getWamData('appId') ?? '', [])
+  const appId = useMemo(() => getWamData('appId') ?? '', [])
   const channelId = useMemo(() => getWamData('channelId') ?? '', [])
-  // const managerId = useMemo(() => getWamData('managerId') ?? '', [])
+  const managerId = useMemo(() => getWamData('managerId') ?? '', [])
   // const message = useMemo(() => getWamData('message') ?? '', [])
   // const chatId = useMemo(() => getWamData('chatId') ?? '', [])
-  // const chatType = useMemo(() => getWamData('chatType') ?? '', [])
+  const chatType = useMemo(() => getWamData('chatType') ?? '', [])
   // const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
-  // const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
+  const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
 
   // const handleSend = useCallback(
   //   async (sender: string): Promise<void> => {
@@ -78,7 +78,7 @@ const CalendarPage = () => {
         id: 1,
         status: 'proposal',
         title: `${channelId}`,
-        contents: '제안서 작성하기',
+        contents: 'channelId',
         startDate: '2021-09-01',
         endDate: '2024-09-10',
         role: 'owner',
@@ -87,15 +87,45 @@ const CalendarPage = () => {
       {
         id: 2,
         status: 'progress',
-        title: `${channelId}`,
-        contents: '제안서 검토하기',
+        title: `${appId}`,
+        contents: 'appId',
+        startDate: '2021-09-01',
+        endDate: '2024-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+      {
+        id: 2,
+        status: 'progress',
+        title: `${managerId}`,
+        contents: 'managerId',
+        startDate: '2021-09-01',
+        endDate: '2024-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+      {
+        id: 2,
+        status: 'progress',
+        title: `${chatType}`,
+        contents: 'chatType',
+        startDate: '2021-09-01',
+        endDate: '2024-09-10',
+        role: 'owner',
+        assignUser: ['123'],
+      },
+      {
+        id: 2,
+        status: 'progress',
+        title: `${rootMessageId}`,
+        contents: 'rootMessageId',
         startDate: '2021-09-01',
         endDate: '2024-09-10',
         role: 'owner',
         assignUser: ['123'],
       },
     ])
-  }, [])
+  }, [appId, channelId, managerId, chatType, rootMessageId])
 
   const filterTasks = (
     tasks: Task[],
