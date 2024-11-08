@@ -22,7 +22,7 @@ const TaskItem = ({
     contents: contents,
     startDate: startDate,
     endDate: endDate,
-    role: role,
+    role: 'manager',
     assignUser: assignUser,
   })
 
