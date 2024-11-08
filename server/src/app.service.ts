@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './infra/task.entity';
 import { Repository } from 'typeorm';
 import { TaskUserMapEntity } from './infra/task-user-map.entity';
+import { UserEntity } from './infra/user.entity';
 
 @Injectable()
 export class AppService {
@@ -11,6 +12,8 @@ export class AppService {
   private readonly taskRepository: Repository<TaskEntity>;
   @InjectRepository(TaskUserMapEntity)
   private readonly taskUserMapRepository: Repository<TaskUserMapEntity>;
+  @InjectRepository(UserEntity)
+  private readonly userRepository: Repository<UserEntity>;
 
   getHello(): string {
     return 'Hello World!';
@@ -38,8 +41,13 @@ export class AppService {
         user: { id: userId },
       });
     });
-
     await this.taskUserMapRepository.save(taskUserMaps);
+
+    await Promise.all(
+      body.userIds.map(async (userId) => {
+        await this.userRepository.increment({ id: userId }, 'totalTasks', 1);
+      }),
+    );
   }
 
   async getTaskAll(channelId: string): Promise<TaskEntity[]> {
@@ -51,5 +59,15 @@ export class AppService {
         },
       },
     });
+  }
+
+  async getUserInfo(userId: string): Promise<UserEntity> {
+    return await this.userRepository.findOne({
+      where: { id: Number(userId) },
+    });
+  }
+
+  async getAllUserInfo(): Promise<UserEntity[]> {
+    return await this.userRepository.find();
   }
 }

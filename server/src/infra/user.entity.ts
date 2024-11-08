@@ -38,6 +38,14 @@ export class UserEntity {
   @Column()
   avatarUrl: string;
 
+  @ApiProperty({ description: 'Completed tasks' })
+  @Column({ type: 'int', default: 0 })
+  completedTasks: number;
+
+  @ApiProperty({ description: 'Total tasks' })
+  @Column({ type: 'int', default: 0 })
+  totalTasks: number;
+
   @ApiProperty({ type: [TaskUserMapEntity] })
   @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.user)
   taskUserMaps: TaskUserMapEntity[];

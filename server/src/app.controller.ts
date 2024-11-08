@@ -18,6 +18,7 @@ import {
 import { HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
 import { TaskEntity } from './infra/task.entity';
+import { UserEntity } from './infra/user.entity';
 
 @Controller('functions')
 export class AppController {
@@ -51,6 +52,13 @@ export class AppController {
     }
   }
 
+  @ApiOperation({
+    summary: 'Task 생성',
+  })
+  @ApiResponse({
+    status: 201,
+    type: HandleTaskRequestDto,
+  })
   @Put('task')
   async createTask(@Body() body: HandleTaskRequestDto): Promise<void> {
     try {
@@ -60,12 +68,52 @@ export class AppController {
     }
   }
 
+  @ApiOperation({
+    summary: '특정 채널의 Task 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    type: TaskEntity,
+    isArray: true,
+  })
   @Get('task/:channelId')
   async getTaskAll(
     @Param('channelId') channelId: string,
   ): Promise<TaskEntity[]> {
     try {
       return await this.appService.getTaskAll(channelId);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiOperation({
+    summary: '특정 유저 정보 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    type: UserEntity,
+  })
+  @Get('task/user/:userId')
+  async getUserInfo(@Param('userId') userId: string): Promise<UserEntity> {
+    try {
+      return await this.appService.getUserInfo(userId);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+  @ApiOperation({
+    summary: '모든 유저 정보 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    type: UserEntity,
+    isArray: true,
+  })
+  @Get('task/all-user')
+  async getAllUserInfo(): Promise<UserEntity[]> {
+    try {
+      return await this.appService.getAllUserInfo();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
