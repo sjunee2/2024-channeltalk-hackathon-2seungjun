@@ -14,6 +14,10 @@ import { join } from 'path';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { TypeOrmConfigs } from 'src/infra/config';
 import { ConfigModule } from '@nestjs/config';
+import { TASK, TaskService } from 'src/task/task.service';
+import { TaskEntity } from 'src/infra/task.entity';
+import { UserEntity } from 'src/infra/user.entity';
+import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
 
 @Module({
   imports: [
@@ -38,10 +42,10 @@ import { ConfigModule } from '@nestjs/config';
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', '..', 'wam', 'dist'),
     }),
-
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigs,
     }),
+    TypeOrmModule.forFeature([TaskEntity, UserEntity, TaskUserMapEntity]),
   ],
   controllers: [AppController],
   providers: [
@@ -50,6 +54,7 @@ import { ConfigModule } from '@nestjs/config';
     TokenService,
     ChannelApiService,
     TutorialService,
+    TaskService,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: HttpInterceptorService,
@@ -63,12 +68,20 @@ export class AppModule implements OnModuleInit {
     private readonly handlerRegistry: HandlerRegistry,
     private readonly channelApiService: ChannelApiService,
     private readonly tutorialService: TutorialService,
+    private readonly taskService: TaskService,
   ) {}
 
   async onModuleInit() {
     try {
       this.logger.log('Registering TutorialService handler...');
       this.handlerRegistry.registerHandler(TUTORIAL, this.tutorialService);
+      this.handlerRegistry.registerHandler(TASK, this.taskService);
+      if (process.env.SYNCHO_COMMAND === 'true') {
+        await this.channelApiService.registerCommandToChannel([
+          this.tutorialService.command,
+          this.taskService.command,
+        ]);
+      }
     } catch (error) {
       this.logger.error('Failed to initialize module', error.stack);
       throw error;
