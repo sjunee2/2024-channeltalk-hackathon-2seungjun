@@ -26,13 +26,12 @@ export class UserEntity {
   name: string;
 
   @ApiProperty({ type: ChannelEntity })
-  @Column({ type: 'bigint' })
   @ManyToOne(() => ChannelEntity, (channel) => channel.id)
   channel: ChannelEntity;
 
   @ApiProperty({ description: 'Channel id' })
   @RelationId((user: UserEntity) => user.channel)
-  @Column({ type: 'bigint', name: 'channel_id' })
+  @Column()
   channelId: number;
 
   @ApiProperty({ description: 'User avatar url' })

@@ -4,10 +4,10 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity({ name: 'channel' })
 export class ChannelEntity {
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'bigint', name: 'group_id' })
+  @Column({ name: 'group_id' })
   groupId: number;
 
   @OneToMany(() => UserEntity, (user) => user.channel)

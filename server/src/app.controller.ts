@@ -17,7 +17,6 @@ import {
 } from 'src/common/interfaces/function.interface';
 import { HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
-import { channel } from 'diagnostics_channel';
 import { TaskEntity } from './infra/task.entity';
 
 @Controller('functions')

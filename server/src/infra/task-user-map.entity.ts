@@ -1,4 +1,3 @@
-import { PROPERTY_DEPS_METADATA } from '@nestjs/common/constants';
 import { ApiProperty } from '@nestjs/swagger';
 import { TaskEntity } from 'src/infra/task.entity';
 import { UserEntity } from 'src/infra/user.entity';
@@ -7,7 +6,7 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('task_user_map')
 export class TaskUserMapEntity {
   @ApiProperty({ description: 'Task User Map 아이디' })
-  @PrimaryGeneratedColumn({ type: 'bigint' })
+  @PrimaryGeneratedColumn({})
   id: number;
 
   @ApiProperty({ description: 'Task' })

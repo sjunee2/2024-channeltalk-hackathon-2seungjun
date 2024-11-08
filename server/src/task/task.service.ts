@@ -83,7 +83,7 @@ export class TaskService
         attributes: {
           clientId: body.context.caller.id,
           appId: this.appId,
-          name: 'task',
+          name: '',
           wamArgs: { user },
         },
       },

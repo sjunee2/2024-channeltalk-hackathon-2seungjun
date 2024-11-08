@@ -4,8 +4,6 @@ import {
   BaseFunctionOutput,
 } from 'src/common/interfaces/function.interface';
 import { TaskStatus } from 'src/infra/task-status.enum';
-import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
-import { UserEntity } from 'src/infra/user.entity';
 import { Timestamp } from 'typeorm';
 
 export class TaskInput extends BaseFunctionInput {}
@@ -28,18 +26,18 @@ export class HandleTaskRequestDto {
   @ApiProperty({ description: 'Task 내용' })
   contents: string;
 
-  @ApiProperty({ description: '역할' })
+  @ApiProperty({ type: 'string', description: '역할' })
   role: string;
 
-  @ApiProperty({ description: '시작일' })
+  @ApiProperty({ type: 'string', description: '시작일' })
   startDate: Timestamp;
 
-  @ApiProperty({ description: '종료일' })
+  @ApiProperty({ type: 'string', description: '종료일' })
   endDate: Timestamp;
 
   @ApiProperty({ description: '배정 대상 유저들 id' })
   userIds: number[];
 
-  @ApiProperty({ description: '삭제일자' })
+  @ApiProperty({ type: 'string', description: '삭제일자' })
   deletedAt: Timestamp | null;
 }
