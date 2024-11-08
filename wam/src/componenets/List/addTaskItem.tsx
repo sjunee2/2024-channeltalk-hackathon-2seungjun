@@ -11,7 +11,7 @@ const AddTaskItem = () => {
     contents: '',
     startDate: '',
     endDate: '',
-    role: '',
+    role: 'manager',
     assignUser: [],
   })
 
@@ -40,7 +40,7 @@ const AddTaskItem = () => {
         taskStatus: task.status,
         title: task.title,
         contents: task.contents,
-        role: task.role,
+        role: 'manager',
         startDate: task.startDate,
         endDate: task.endDate,
         userIds: task.assignUser,

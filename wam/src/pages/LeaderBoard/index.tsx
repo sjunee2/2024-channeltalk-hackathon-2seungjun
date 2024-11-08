@@ -20,7 +20,7 @@ const LeaderBoard = ({ userData, myData }: LeaderBoardProps) => {
           <Character src={imgSrc} />
         </CharacterWrapper>
         <Quest>
-          남은 퀘스트 <QuestNum>{remainTask}</QuestNum>개
+          남은 퀘스트 <QuestNum>4</QuestNum>개
         </Quest>
       </QuestWrapper>
       <LeaderBoardWrapper>

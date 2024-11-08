@@ -12,7 +12,6 @@ const TaskItem = ({
   contents,
   startDate,
   endDate,
-  role,
   assignUser,
 }: Task) => {
   const [task, setTask] = useState({
