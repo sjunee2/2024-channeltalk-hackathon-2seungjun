@@ -25,25 +25,11 @@ export class TokenService {
   constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 
   /**
-   * access-token을 가져옵니다.
-   */
-  async getAccessToken(): Promise<string | null> {
-    const accessToken = await this.cacheManager.get<string>('accessToken');
-    return accessToken;
-  }
-
-  /**
-   * refresh-token을 가져옵니다.
-   */
-  async getRefreshToken(): Promise<string | null> {
-    return await this.cacheManager.get<string>('refreshToken');
-  }
-
-  /**
    * Channel.io API를 통해 새로운 access-token과 refresh-token을 발급받습니다.
    */
   async getChannelToken(channelId: string = 'general'): Promise<TokenResponse> {
     try {
+      console.log('get channel Token by ', channelId);
       const cachedToken: string | undefined =
         await this.cacheManager.get(channelId);
       const channelToken: TokenResponse | undefined =
@@ -54,7 +40,10 @@ export class TokenService {
       ) {
         const tokensResponse: TokenResponse =
           await this.requestIssueToken(channelId);
-        await this.cacheManager.set(channelId, JSON.stringify(tokensResponse));
+        await this.cacheManager.set(
+          this.setCacheKey(channelId),
+          JSON.stringify(tokensResponse),
+        );
         return tokensResponse;
       }
 
@@ -82,5 +71,9 @@ export class TokenService {
     const expiresAt =
       new Date().getTime() / 1000 + response.data.result.expiresIn - 5;
     return { accessToken, refreshToken, expiresAt };
+  }
+
+  private setCacheKey(channelId: string) {
+    return `channel-token-${channelId}`;
   }
 }

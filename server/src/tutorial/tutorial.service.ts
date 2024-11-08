@@ -32,62 +32,23 @@ export class TutorialService
   async execute(
     body: BaseFunctionRequest<TutorialInput>,
   ): Promise<TutorialOutput> {
-    const result = await this.apiService.useNativeFunction({
-      method: 'writeGroupMessage',
-      params: {
-        channelId: body.context.channel.id,
-        groupId: body.params.chat.id,
-        rootMessageId: undefined,
-        broadcast: false,
-        dto: {
-          plainText: '안녕하세요! 튜토리얼 메시지입니다.',
-          botName: 'Tutorial Bot',
-        },
-      },
-      context: {
-        channel: {
-          id: body.context.channel.id,
-        },
-        caller: {
-          type: 'user',
-          id: body.context.caller.id,
-        },
+    console.log(body);
+    const newRequest = BaseFunctionRequest.createNew(body);
+    newRequest.setMethod('writeGroupMessage');
+    newRequest.addParams({
+      channelId: body.context.channel.id,
+      groupId: body.params.chat.id,
+      rootMessageId: undefined,
+      dto: {
+        plainText: '하이하이',
+        botName: '이승준',
       },
     });
-    console.log(result);
-    const requestParams = {
-      method: 'writeGroupMessage',
-      params: {
-        channelId: body.context.channel.id,
-        groupId: body.params.chat.id,
-        dto: {
-          blocks: [], // 메시지 블록이 필요한 경우 추가
-          plainText: '안녕하세요! 튜토리얼 메시지입니다.',
-          buttons: [
-            {
-              title: '튜토리얼 버튼',
-              colorVariant: 'primary',
-              action: {
-                commandAction: {
-                  attributes: {
-                    appId: process.env.APP_ID,
-                    name: 'tutorial',
-                    params: {},
-                  },
-                },
-              },
-            },
-          ],
-          botName: 'Tutorial Bot',
-        },
-      },
-      context: body.context,
-    };
-
-    await this.apiService.useNativeFunction(requestParams);
+    console.log(newRequest);
+    const result = await this.apiService.useNativeFunction(newRequest);
     return {
       result: {
-        hello: body,
+        hello: result.data.result,
       },
     };
   }
