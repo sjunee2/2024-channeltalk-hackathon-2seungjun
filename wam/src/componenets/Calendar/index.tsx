@@ -1,6 +1,13 @@
-import { Task } from '../../types/task'
+import { Role, Task } from '../../types/task'
 
-const Calendar = ({ taskData }: { taskData: Task[] }) => {
+interface CalendarProps {
+  taskData: Task[]
+  roleData: Role[]
+  userData: User[]
+  myData: User
+}
+
+const Calendar = ({ taskData, roleData }: CalendarProps) => {
   return <div>캘린더 입니다</div>
 }
 
