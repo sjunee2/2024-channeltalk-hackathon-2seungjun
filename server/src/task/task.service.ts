@@ -1,9 +1,12 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelApiService } from 'src/channel-api/channelApi.service';
 import { Command } from 'src/common/interfaces/command';
 import { BaseFunctionRequest } from 'src/common/interfaces/function.interface';
 import { HandlerService } from 'src/common/service/handler.service';
+import { UserEntity } from 'src/infra/user.entity';
 import { TaskInput, TaskOutput } from 'src/task/task.dto';
+import { Repository } from 'typeorm';
 
 export const TASK = 'task';
 @Injectable()
@@ -12,6 +15,9 @@ export class TaskService
 {
   private readonly logger = new Logger(TaskService.name);
   private readonly appId = process.env.CHANNEL_APPLICATION_ID;
+  // 레포레이어 쪼개지 말고 걍 만들기!
+  @InjectRepository(UserEntity)
+  private readonly usersRepository: Repository<UserEntity>;
 
   constructor(private readonly apiService: ChannelApiService) {}
 
@@ -31,22 +37,31 @@ export class TaskService
   async execute(body: BaseFunctionRequest<TaskInput>): Promise<TaskOutput> {
     console.log(body);
     const newRequest = BaseFunctionRequest.createNew(body);
-    newRequest.setMethod('writeGroupMessage');
+    newRequest.setMethod('getUser');
     newRequest.addParams({
       channelId: body.context.channel.id,
-      groupId: body.params.chat.id,
-      rootMessageId: undefined,
-      dto: {
-        plainText: '하이하이',
-        botName: '이승준',
-      },
+      userId: body.context.caller.id,
     });
     const result = await this.apiService.useNativeFunction(newRequest);
+    const userInfo = result.data.result.user;
+
+    const existingUser: UserEntity = await this.usersRepository.findOne({
+      where: {
+        id: parseInt(body.context.caller.id),
+      },
+    });
+    if (!existingUser) {
+      await this.usersRepository.save({
+        id: parseInt(userInfo.id),
+        type: userInfo.type,
+        name: userInfo.name,
+      });
+    }
     return {
       result: {
         type: 'wam',
         attributes: {
-          clientId: body.context.caller.id.toString(),
+          clientId: body.context.caller.id,
           appId: this.appId,
           name: 'task',
           wamArgs: {},

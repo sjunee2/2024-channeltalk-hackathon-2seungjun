@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { TaskStatus } from './task-status.enum';
+import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
 
 @Entity('task')
 export class TaskEntity extends CommonEntity {
@@ -15,4 +16,7 @@ export class TaskEntity extends CommonEntity {
 
   @Column('varchar')
   role: string;
+
+  @OneToMany(() => TaskUserMapEntity, (taskUserMap) => taskUserMap.task)
+  taskUserMaps: TaskUserMapEntity[];
 }
