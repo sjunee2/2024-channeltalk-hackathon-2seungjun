@@ -19,16 +19,16 @@ export class TaskScheduler {
     private readonly channelRepository: Repository<ChannelEntity>,
   ) {}
 
-  @Cron('*/10 * * * * *')
-  async handleCron() {
-    const tasks = await this.taskRepository.find({
-      //   where: { taskStatus: TaskStatus. },
-    });
-    console.log(tasks);
-  }
+  // @Cron('*/10 * * * * *')
+  // async handleCron() {
+  //   const tasks = await this.taskRepository.find({
+  //     //   where: { taskStatus: TaskStatus. },
+  //   });
+  //   console.log(tasks);
+  // }
 
-  // @Cron('0 */3 * * * *')
-  @Cron('*/10 * * * * *')
+  @Cron('0 */3 * * * *')
+  // @Cron('*/10 * * * * *')
   async overallMessage() {
     const channels = await this.channelRepository.find();
     for (const channel of channels) {
@@ -70,7 +70,6 @@ export class TaskScheduler {
           },
         },
       } as BaseFunctionRequest<any>);
-      console.log('ㄷㄷ');
       request.setMethod('writeGroupMessage');
       request.addParams({
         channelId: channel.id,
