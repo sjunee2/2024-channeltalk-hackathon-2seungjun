@@ -9,6 +9,8 @@ import { TokenService } from 'src/token/token.service';
 import { RedisClientOptions } from 'redis';
 import { CacheModule } from '@nestjs/cache-manager';
 import { redisStore } from 'cache-manager-redis-yet';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -24,6 +26,10 @@ import { redisStore } from 'cache-manager-redis-yet';
         }),
       }),
       isGlobal: true,
+    }),
+
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', '..', 'wam', 'dist'), // 'view' 폴더의 빌드 결과물 경로 설정
     }),
   ],
   controllers: [AppController],
