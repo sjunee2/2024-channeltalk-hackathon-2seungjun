@@ -99,7 +99,7 @@ ${oneWeekTasks.map((task) => `- ${task.title}`).join('\n')}`,
                   attributes: {
                     appId: this.appId,
                     clientId: channel.groupId,
-                    name: 'calendar',
+                    name: '/',
                     params: {},
                   },
                 },
