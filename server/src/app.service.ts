@@ -43,15 +43,13 @@ export class AppService {
   }
 
   async getTaskAll(channelId: string): Promise<TaskEntity[]> {
-    const taskUserMaps = await this.taskUserMapRepository.find({
-      relations: ['task'],
-      where: { user: { channel: { id: Number(channelId) } } },
-    });
-
-    const taskIds = taskUserMaps.map((taskUserMap) => taskUserMap.task.id);
-
     return this.taskRepository.find({
-      where: { id: In(taskIds) },
+      where: { channelId: Number(channelId) },
+      relations: {
+        taskUserMaps: {
+          user: true,
+        },
+      },
     });
   }
 }
