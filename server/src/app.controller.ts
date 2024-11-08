@@ -1,4 +1,11 @@
-import { Controller, Body, BadRequestException, Put } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  BadRequestException,
+  Put,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HandlerRegistry } from 'src/common/handler/handler.registry';
 import {
@@ -8,10 +15,16 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
+import { HandleTaskRequestDto } from './task/task.dto';
+import { AppService } from './app.service';
+import { TaskEntity } from './infra/task.entity';
 
 @Controller('functions')
 export class AppController {
-  constructor(private readonly handlerRegistry: HandlerRegistry) {}
+  constructor(
+    private readonly handlerRegistry: HandlerRegistry,
+    private readonly appService: AppService,
+  ) {}
 
   @ApiOperation({
     summary: '채널톡 API 엔드포인트',
@@ -33,6 +46,26 @@ export class AppController {
   ): Promise<BaseFunctionOutput> {
     try {
       return await this.handlerRegistry.executeHandler(body);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Put('task')
+  async createTask(@Body() body: HandleTaskRequestDto): Promise<void> {
+    try {
+      await this.appService.createTask(body);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('task/:channelId')
+  async getTaskAll(
+    @Param('channelId') channelId: string,
+  ): Promise<TaskEntity[]> {
+    try {
+      return await this.appService.getTaskAll(channelId);
     } catch (error) {
       throw new BadRequestException(error.message);
     }

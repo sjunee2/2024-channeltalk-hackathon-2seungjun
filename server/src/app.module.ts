@@ -18,6 +18,8 @@ import { TASK, TaskService } from 'src/task/task.service';
 import { TaskEntity } from 'src/infra/task.entity';
 import { UserEntity } from 'src/infra/user.entity';
 import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
+import { INIT, InitService } from 'src/init/init.service';
+import { ChannelEntity } from 'src/infra/channel.entity';
 
 @Module({
   imports: [
@@ -45,7 +47,12 @@ import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigs,
     }),
-    TypeOrmModule.forFeature([TaskEntity, UserEntity, TaskUserMapEntity]),
+    TypeOrmModule.forFeature([
+      TaskEntity,
+      UserEntity,
+      TaskUserMapEntity,
+      ChannelEntity,
+    ]),
   ],
   controllers: [AppController],
   providers: [
@@ -55,6 +62,7 @@ import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
     ChannelApiService,
     TutorialService,
     TaskService,
+    InitService,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: HttpInterceptorService,
@@ -69,6 +77,7 @@ export class AppModule implements OnModuleInit {
     private readonly channelApiService: ChannelApiService,
     private readonly tutorialService: TutorialService,
     private readonly taskService: TaskService,
+    private readonly initService: InitService,
   ) {}
 
   async onModuleInit() {
@@ -76,10 +85,12 @@ export class AppModule implements OnModuleInit {
       this.logger.log('Registering TutorialService handler...');
       this.handlerRegistry.registerHandler(TUTORIAL, this.tutorialService);
       this.handlerRegistry.registerHandler(TASK, this.taskService);
+      this.handlerRegistry.registerHandler(INIT, this.initService);
       if (process.env.SYNCHO_COMMAND === 'true') {
         await this.channelApiService.registerCommandToChannel([
           this.tutorialService.command,
           this.taskService.command,
+          this.initService.command,
         ]);
       }
     } catch (error) {
