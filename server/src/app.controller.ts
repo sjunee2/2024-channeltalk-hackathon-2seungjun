@@ -69,6 +69,23 @@ export class AppController {
   }
 
   @ApiOperation({
+    summary: '모든 유저 정보 조회',
+  })
+  @ApiResponse({
+    status: 200,
+    type: UserEntity,
+    isArray: true,
+  })
+  @Get('functions/task/all-user')
+  async getAllUserInfo(): Promise<GetUserInfoResponseDto[]> {
+    try {
+      return await this.appService.getAllUserInfo();
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @ApiOperation({
     summary: '특정 채널의 Task 조회',
   })
   @ApiResponse({
@@ -100,22 +117,6 @@ export class AppController {
   ): Promise<GetUserInfoResponseDto> {
     try {
       return await this.appService.getUserInfo(userId);
-    } catch (error) {
-      throw new BadRequestException(error.message);
-    }
-  }
-  @ApiOperation({
-    summary: '모든 유저 정보 조회',
-  })
-  @ApiResponse({
-    status: 200,
-    type: UserEntity,
-    isArray: true,
-  })
-  @Get('functions/task/all-user')
-  async getAllUserInfo(): Promise<GetUserInfoResponseDto[]> {
-    try {
-      return await this.appService.getAllUserInfo();
     } catch (error) {
       throw new BadRequestException(error.message);
     }
