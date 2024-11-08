@@ -1,0 +1,13 @@
+version: '3'
+services:
+  api:
+    container_name: channel-sj-server-dev
+    restart: always
+    image: node:20.11.0
+    working_dir: /usr/src/app
+    command: bash -c "yarn install && yarn start:dev"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    ports:
+      - '3022:3022'
