@@ -1,4 +1,11 @@
-import { Controller, Body, BadRequestException, Put } from '@nestjs/common';
+import {
+  Controller,
+  Body,
+  BadRequestException,
+  Put,
+  Get,
+  Param,
+} from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HandlerRegistry } from 'src/common/handler/handler.registry';
 import {
@@ -8,8 +15,10 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
-import { CreateTaskRequestDto } from './task/task.dto';
+import { GetAllTaskResponseDto, HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
+import { channel } from 'diagnostics_channel';
+import { TaskEntity } from './infra/task.entity';
 
 @Controller('functions')
 export class AppController {
@@ -44,9 +53,20 @@ export class AppController {
   }
 
   @Put('task')
-  async createTask(@Body() body: CreateTaskRequestDto): Promise<void> {
+  async createTask(@Body() body: HandleTaskRequestDto): Promise<void> {
     try {
       await this.appService.createTask(body);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Get('task/:channelId')
+  async getTaskAll(
+    @Param('channelId') channelId: string,
+  ): Promise<TaskEntity> {
+    try {
+      return await this.appService.getTaskAll(channelId);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
