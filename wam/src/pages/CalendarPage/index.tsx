@@ -6,6 +6,7 @@ import Calendar from '../../componenets/Calendar'
 import List from '../../componenets/List'
 import { isMobile } from '../../utils/userAgent'
 import { Task } from '../../types/task'
+// import { getWamData } from '../../utils/wam'
 
 const CalendarPage = () => {
   const [taskData, setTaskData] = useState<Task[]>([])
@@ -76,7 +77,7 @@ const CalendarPage = () => {
       {
         id: 1,
         status: 'proposal',
-        title: '제안서 작성',
+        title: `${'안녕'}`,
         contents: '제안서 작성하기',
         startDate: '2021-09-01',
         endDate: '2024-09-10',
@@ -86,7 +87,7 @@ const CalendarPage = () => {
       {
         id: 2,
         status: 'progress',
-        title: '제안서 검토',
+        title: `${'저런'}`,
         contents: '제안서 검토하기',
         startDate: '2021-09-01',
         endDate: '2024-09-10',
