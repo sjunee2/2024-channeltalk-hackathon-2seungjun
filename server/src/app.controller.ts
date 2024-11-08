@@ -73,7 +73,7 @@ export class AppController {
   })
   @ApiResponse({
     status: 200,
-    type: UserEntity,
+    type: GetUserInfoResponseDto,
     isArray: true,
   })
   @Get('functions/task/all-user')
@@ -109,7 +109,7 @@ export class AppController {
   })
   @ApiResponse({
     status: 200,
-    type: UserEntity,
+    type: GetUserInfoResponseDto,
   })
   @Get('functions/task/user/:userId')
   async getUserInfo(
