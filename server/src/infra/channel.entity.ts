@@ -10,6 +10,12 @@ export class ChannelEntity {
   @Column({ name: 'group_id' })
   groupId: number;
 
+  @Column({ name: 'name' })
+  name: string;
+
+  @Column({ name: 'avatar' })
+  avatar: string;
+
   @OneToMany(() => UserEntity, (user) => user.channel)
   users: UserEntity[];
 

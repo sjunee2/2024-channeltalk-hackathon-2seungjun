@@ -20,9 +20,12 @@ import { UserEntity } from 'src/infra/user.entity';
 import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
 import { INIT, InitService } from 'src/init/init.service';
 import { ChannelEntity } from 'src/infra/channel.entity';
+import { TaskScheduler } from 'src/task/task.scheduler';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot({
       envFilePath: ['.env', '.env.dev'],
       isGlobal: true,
@@ -63,6 +66,7 @@ import { ChannelEntity } from 'src/infra/channel.entity';
     TutorialService,
     TaskService,
     InitService,
+    TaskScheduler,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: HttpInterceptorService,

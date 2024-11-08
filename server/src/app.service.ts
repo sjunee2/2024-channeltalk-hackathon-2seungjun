@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HandleTaskRequestDto } from './task/task.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { TaskEntity } from './infra/task.entity';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { TaskUserMapEntity } from './infra/task-user-map.entity';
 import { UserEntity } from './infra/user.entity';
 
