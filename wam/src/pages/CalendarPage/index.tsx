@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useState } from 'react'
 import { useFilterStore } from '../../store/filter'
 import { Button } from '@channel.io/bezier-react'
 import Filter from '../../componenets/Filter'
@@ -6,7 +6,6 @@ import Calendar from '../../componenets/Calendar'
 import List from '../../componenets/List'
 import { isMobile } from '../../utils/userAgent'
 import { Task } from '../../types/task'
-import { getWamData } from '../../utils/wam'
 
 const CalendarPage = () => {
   const [taskData, setTaskData] = useState<Task[]>([])
@@ -16,14 +15,15 @@ const CalendarPage = () => {
 
   // const chatTitle = useMemo(() => getWamData('chatTitle') ?? '', [])
 
-  const appId = useMemo(() => getWamData('appId') ?? '', [])
-  const channelId = useMemo(() => getWamData('channelId') ?? '', [])
-  const managerId = useMemo(() => getWamData('managerId') ?? '', [])
+  // const appId = useMemo(() => getWamData('appId') ?? '', [])
+  // const channelId = useMemo(() => getWamData('channelId') ?? '', [])
+  // const managerId = useMemo(() => getWamData('managerId') ?? '', [])
+  // const userId = useMemo(() => getWamData('userId') ?? '', [])
   // const message = useMemo(() => getWamData('message') ?? '', [])
   // const chatId = useMemo(() => getWamData('chatId') ?? '', [])
-  const chatType = useMemo(() => getWamData('chatType') ?? '', [])
-  // const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
-  const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
+  // const chatType = useMemo(() => getWamData('chatType') ?? '', [])
+  // // const broadcast = useMemo(() => Boolean(getWamData('broadcast') ?? false), [])
+  // const rootMessageId = useMemo(() => getWamData('rootMessageId'), [])
 
   // const handleSend = useCallback(
   //   async (sender: string): Promise<void> => {
@@ -72,60 +72,80 @@ const CalendarPage = () => {
   //   ]
   // )
 
-  useEffect(() => {
-    setTaskData([
-      {
-        id: 1,
-        status: 'proposal',
-        title: `${channelId}`,
-        contents: 'channelId',
-        startDate: '2021-09-01',
-        endDate: '2024-09-10',
-        role: 'owner',
-        assignUser: ['123'],
-      },
-      {
-        id: 2,
-        status: 'progress',
-        title: `${appId}`,
-        contents: 'appId',
-        startDate: '2021-09-01',
-        endDate: '2024-09-10',
-        role: 'owner',
-        assignUser: ['123'],
-      },
-      {
-        id: 2,
-        status: 'progress',
-        title: `${managerId}`,
-        contents: 'managerId',
-        startDate: '2021-09-01',
-        endDate: '2024-09-10',
-        role: 'owner',
-        assignUser: ['123'],
-      },
-      {
-        id: 2,
-        status: 'progress',
-        title: `${chatType}`,
-        contents: 'chatType',
-        startDate: '2021-09-01',
-        endDate: '2024-09-10',
-        role: 'owner',
-        assignUser: ['123'],
-      },
-      {
-        id: 2,
-        status: 'progress',
-        title: `${rootMessageId}`,
-        contents: 'rootMessageId',
-        startDate: '2021-09-01',
-        endDate: '2024-09-10',
-        role: 'owner',
-        assignUser: ['123'],
-      },
-    ])
-  }, [appId, channelId, managerId, chatType, rootMessageId])
+  // useEffect(() => {
+  //   // callFunction(appId, '')
+  //   // const data = async () => {
+  //   //   await callFunction(appId, 'sendAsBot', {
+  //   //     input: {
+  //   //       groupId: chatId,
+  //   //       broadcast,
+  //   //       rootMessageId,
+  //   //     },
+  //   //   })
+  //   // }();
+  //   setTaskData([
+  //     {
+  //       id: 1,
+  //       status: 'proposal',
+  //       title: `${channelId}`,
+  //       contents: 'channelId',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //     {
+  //       id: 2,
+  //       status: 'progress',
+  //       title: `${appId}`,
+  //       contents: 'appId',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //     {
+  //       id: 3,
+  //       status: 'progress',
+  //       title: `${userId}`,
+  //       contents: 'userId',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //     {
+  //       id: 4,
+  //       status: 'progress',
+  //       title: `${managerId}`,
+  //       contents: 'managerId',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //     {
+  //       id: 5,
+  //       status: 'progress',
+  //       title: `${chatType}`,
+  //       contents: 'chatType',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //     {
+  //       id: 6,
+  //       status: 'progress',
+  //       title: `${rootMessageId}`,
+  //       contents: 'rootMessageId',
+  //       startDate: '2021-09-01',
+  //       endDate: '2024-09-10',
+  //       role: 'owner',
+  //       assignUser: ['123'],
+  //     },
+  //   ])
+  // }, [appId, channelId, managerId, chatType, rootMessageId, userId])
 
   const filterTasks = (
     tasks: Task[],
