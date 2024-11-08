@@ -6,7 +6,7 @@ import { AppProvider } from '@channel.io/bezier-react'
 import { MantineProvider } from '@mantine/core'
 import { useAppIdStore } from './store/appId'
 import { useMemo, useEffect } from 'react'
-import { getWamData } from './utils/wam'
+import { getWamData, setSize } from './utils/wam'
 
 function App() {
   const appId = useMemo(() => getWamData('appId') ?? '', [])
@@ -14,6 +14,7 @@ function App() {
 
   useEffect(() => {
     setAppId(appId)
+    setSize(800, 700)
   }, [appId, setAppId])
 
   return (
