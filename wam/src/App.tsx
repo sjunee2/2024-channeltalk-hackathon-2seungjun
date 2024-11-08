@@ -15,7 +15,7 @@ import { useFilterStore } from './store/filter'
 function App() {
   const [taskData, setTaskData] = useState<Task[]>([])
   const { status, role, assignUser } = useFilterStore()
-  
+
   useEffect(() => {
     setTaskData([
       {
@@ -39,13 +39,18 @@ function App() {
         assignUser: ['123'],
       },
     ])
-  }, []);
+  }, [])
 
-  const filterTasks = (tasks: Task[], status: string, role: string, assignUser: string) => {
+  const filterTasks = (
+    tasks: Task[],
+    status: string,
+    role: string,
+    assignUser: string
+  ) => {
     return tasks.filter(
       (task) =>
-        (status !== 'none' ? task.status === status : true ) &&
-        (role !== 'none' ? task.role === role : true ) &&
+        (status !== 'none' ? task.status === status : true) &&
+        (role !== 'none' ? task.role === role : true) &&
         (assignUser !== 'none' ? task.assignUser.includes(assignUser) : true)
     )
   }
@@ -69,7 +74,6 @@ function App() {
           padding: isMobile() ? '16px' : '0 24px 24px 24px',
         }}
       >
-      <div style={{ padding: isMobile() ? '16px' : '0 24px 24px 24px' }}>
         <Filter />
         <List taskData={filterTasks(taskData, status, role, assignUser)} />
       </div>
