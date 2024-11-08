@@ -11,6 +11,10 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
+      element: <div>루트 페이지에서 보여야 하는 것</div>,
+    },
+    {
+      path: '/calendar',
       element: <CalendarPage />,
     },
   ])
