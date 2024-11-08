@@ -5,7 +5,6 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
   RelationId,
-  Timestamp,
 } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { TaskStatus } from './task-status.enum';
@@ -33,11 +32,11 @@ export class TaskEntity extends CommonEntity {
 
   @ApiProperty({ type: 'string', description: '시작일' })
   @Column('timestamp')
-  startDate: Timestamp;
+  startDate: Date;
 
   @ApiProperty({ type: 'string', description: '종료일' })
   @Column('timestamp')
-  endDate: Timestamp;
+  endDate: Date;
 
   @ManyToOne(() => ChannelEntity, (channel) => channel.tasks)
   channel: ChannelEntity;

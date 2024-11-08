@@ -41,12 +41,12 @@ export class TaskScheduler {
       });
 
       const now = new Date();
-      const ONE_DAY = 24 * 60 * 60 * 1000; // 1일을 밀리초로
+      const ONE_DAY = 24 * 60 * 60 * 1000;
 
       // 1일 남은 일
       const oneDayTasks = tasks.filter((task) => {
-        const endDate = new Date(task.endDate.toString());
-        const diffTime = endDate.valueOf() - now.valueOf();
+        const endDate = task.endDate;
+        const diffTime = endDate.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / ONE_DAY);
         console.log(
           `Task: ${task.title}, EndDate: ${endDate}, DiffDays: ${diffDays}`,
@@ -56,16 +56,16 @@ export class TaskScheduler {
 
       // 3일 남은 일
       const threeDayTasks = tasks.filter((task) => {
-        const endDate = new Date(task.endDate.toString());
-        const diffTime = endDate.valueOf() - now.valueOf();
+        const endDate = task.endDate;
+        const diffTime = endDate.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / ONE_DAY);
         return diffDays === 3;
       });
 
       // 1주 이상 남은 일
       const oneWeekTasks = tasks.filter((task) => {
-        const endDate = new Date(task.endDate.toString());
-        const diffTime = endDate.valueOf() - now.valueOf();
+        const endDate = task.endDate;
+        const diffTime = endDate.getTime() - now.getTime();
         const diffDays = Math.ceil(diffTime / ONE_DAY);
         return diffDays >= 7;
       });
@@ -88,7 +88,7 @@ export class TaskScheduler {
         rootMessageId: undefined,
         dto: {
           plainText: `📅 ${channel.name}의 ${new Date().getFullYear()}년 ${new Date().getMonth() + 1}월 ${new Date().getDate()}일 할 일 현황을 알려드립니다 📅
-
+ㅅ
 🚨 긴급 처리가 필요한 일정 (1일 이내 마감)
 현재 긴급하게 처리해야 할 일정이 ${oneDayTasks.length}개 있습니다. 서둘러 확인해주세요!
 ${oneDayTasks.map((task) => `- ${task.title}`).join('\n')}
@@ -97,7 +97,7 @@ ${oneDayTasks.map((task) => `- ${task.title}`).join('\n')}
 앞으로 3일 안에 처리해야 할 일정이 ${threeDayTasks.length}개 있습니다. 미리미리 준비해주세요.
 ${threeDayTasks.map((task) => `- ${task.title}`).join('\n')}
 
-📌 장기 프로젝트 (1주일 이상)
+📌 장기 프로젝��� (1주일 이상)
 장기적으로 진행해야 할 프로젝트가 ${oneWeekTasks.length}개 있습니다. 계획적으로 진행해주세요!
 ${oneWeekTasks.map((task) => `- ${task.title}`).join('\n')}`,
           botName: '캘린이',
