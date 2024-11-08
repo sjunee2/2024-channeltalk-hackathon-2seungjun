@@ -48,6 +48,8 @@ export class InitService
     const channel: ChannelEntity = await this.channelsRepository.create({
       id: Number(channelInfo.id),
       groupId: Number(body.params.chat.id),
+      name: channelInfo.name,
+      avatar: channelInfo.avatar,
     });
     console.log(channel);
     await this.channelsRepository.save(channel);
@@ -63,13 +65,13 @@ export class InitService
         buttons: [
           {
             title: '캘린더 바로가기',
-            colorVariant: 'COLOR_VARIANT_COBALT',
+            colorVariant: 'COLOR_VARIANT_UNSPECIFIED',
             action: {
               wamAction: {
                 attributes: {
                   appId: this.appId,
                   clientId: body.context.caller.id,
-                  name: '',
+                  name: 'calendar',
                   params: {},
                 },
               },
@@ -78,6 +80,7 @@ export class InitService
         ],
       },
     });
+    console.log(request2.params.dto.buttons);
     await this.apiService.useNativeFunction(request2);
 
     return {

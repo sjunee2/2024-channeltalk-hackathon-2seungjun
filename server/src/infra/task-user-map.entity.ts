@@ -6,7 +6,7 @@ import { Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 @Entity('task_user_map')
 export class TaskUserMapEntity {
   @ApiProperty({ description: 'Task User Map 아이디' })
-  @PrimaryGeneratedColumn({})
+  @PrimaryGeneratedColumn()
   id: number;
 
   @ApiProperty({ description: 'Task' })
