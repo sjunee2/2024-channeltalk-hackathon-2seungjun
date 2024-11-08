@@ -9,13 +9,13 @@ import { useMemo, useEffect } from 'react'
 import { getWamData, setSize } from './utils/wam'
 
 function App() {
-  const appId = useMemo(() => getWamData('appId') ?? '', [])
-  const { setAppId } = useAppIdStore()
+  // const appId = useMemo(() => getWamData('appId') ?? '', [])
+  // const { setAppId } = useAppIdStore()
 
-  useEffect(() => {
-    setAppId(appId)
-    setSize(800, 700)
-  }, [appId, setAppId])
+  // useEffect(() => {
+  //   setAppId(appId)
+  //   setSize(800, 700)
+  // }, [appId, setAppId])
 
   return (
     <AppProvider>
