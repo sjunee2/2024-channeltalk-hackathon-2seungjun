@@ -1,15 +1,14 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   BaseFunctionInput,
-  WamFunctionOutput,
+  BaseFunctionOutput,
 } from 'src/common/interfaces/function.interface';
 import { TaskStatus } from 'src/infra/task-status.enum';
-import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';
 import { Timestamp } from 'typeorm';
 
 export class TaskInput extends BaseFunctionInput {}
 
-export class TaskOutput extends WamFunctionOutput {}
+export class TaskOutput extends BaseFunctionOutput {}
 
 export class CreateTaskRequestDto {
   @ApiProperty({ description: 'Task 아이디' })

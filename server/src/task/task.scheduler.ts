@@ -25,5 +25,8 @@ export class TaskScheduler {
     const tasks = await this.taskRepository.find({
       where: { taskStatus: Not(TaskStatus.DONE) },
     });
+    // 1일 남은 일
+    // 3일 남은 일
+    // 1주 이상 남은 일
   }
 }

@@ -45,11 +45,12 @@ export class TutorialService
         buttons: [
           {
             title: '클릭하면 WAM이 뜹니다!',
-            colorVariant: 1,
+            colorVariant: 'COLOR_VARIANT_UNSPECIFIED',
             action: {
-              WAMAction: {
+              wamAction: {
                 attributes: {
                   appId: this.appId,
+                  clientId: body.context.caller.id,
                   name: TASK,
                   params: {},
                 },
