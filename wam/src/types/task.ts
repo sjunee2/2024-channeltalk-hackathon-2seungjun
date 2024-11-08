@@ -1,6 +1,7 @@
 export interface Task {
   id: number
   status: 'proposal' | 'assign' | 'progress' | 'done'
+  title: string
   contents: string
   startDate: string
   endDate: string

@@ -7,8 +7,19 @@ interface ListProps {
   myData: User
 }
 
-const List = ({props}: {props: ListProps[]}) => {
-  return <div>리스트 입니다</div>
+const List = ({ taskData, roleData, userData, myData }: ListProps) => {
+  return (
+    <div>
+      <h2>Task List</h2>
+      <ul>
+        {taskData.map((task) => (
+          <li key={task.id}>
+            {task.title} - {task.contents}
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
 };
 
 export default List
