@@ -7,7 +7,6 @@ import { TutorialOutput } from 'src/tutorial/tutorial.dto';
 import { TutorialInput } from 'src/tutorial/tutorial.dto';
 
 export const TUTORIAL = 'tutorial';
-export const GET_USER = 'getUser';
 @Injectable()
 export class TutorialService
   implements HandlerService<TutorialInput, TutorialOutput>, OnModuleInit
@@ -19,7 +18,6 @@ export class TutorialService
   async onModuleInit() {
     try {
       await this.apiService.waitForInitialization();
-      await this.registerCommand();
     } catch (error) {
       this.logger.error('Failed to initialize TutorialService', error.stack);
       throw error;
@@ -56,7 +54,7 @@ export class TutorialService
   /**
    * 외부 채널에 `tutorial` 커맨드를 등록하는 메서드
    */
-  private async registerCommand() {
+  get command(): Command {
     const commandForTutorial: Command = {
       name: TUTORIAL,
       scope: 'desk',
@@ -65,7 +63,7 @@ export class TutorialService
       alfMode: 'disable',
       enabledByDefault: true,
     };
-
-    await this.apiService.registerCommandToChannel([commandForTutorial]);
+    return commandForTutorial;
+    // await this.apiService.registerCommandToChannel([commandForTutorial]);
   }
 }

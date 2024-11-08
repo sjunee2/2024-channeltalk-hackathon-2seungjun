@@ -1,4 +1,4 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { CommonEntity } from './common.entity';
 import { TaskStatus } from './task-status.enum';
 import { TaskUserMapEntity } from 'src/infra/task-user-map.entity';

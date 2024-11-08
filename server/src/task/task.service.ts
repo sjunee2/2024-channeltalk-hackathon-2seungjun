@@ -1,4 +1,9 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+  OnModuleInit,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ChannelApiService } from 'src/channel-api/channelApi.service';
 import { Command } from 'src/common/interfaces/command';
@@ -24,7 +29,6 @@ export class TaskService
   async onModuleInit() {
     try {
       await this.apiService.waitForInitialization();
-      await this.registerCommand();
     } catch (error) {
       this.logger.error('Failed to initialize TaskService', error.stack);
       throw error;
@@ -35,23 +39,38 @@ export class TaskService
    * 실제 로직 처리
    */
   async execute(body: BaseFunctionRequest<TaskInput>): Promise<TaskOutput> {
-    console.log(body);
+    let methodName;
+    const type = body.context.caller.type;
+    switch (type) {
+      case 'user':
+        methodName = 'getUser';
+        break;
+      case 'manager':
+        methodName = 'getManager';
+        break;
+      case 'app':
+        throw new InternalServerErrorException('App cannot call this function');
+    }
     const newRequest = BaseFunctionRequest.createNew(body);
-    newRequest.setMethod('getUser');
+    newRequest.setMethod(methodName);
     newRequest.addParams({
       channelId: body.context.channel.id,
       userId: body.context.caller.id,
+      managerId: body.context.caller.id,
     });
     const result = await this.apiService.useNativeFunction(newRequest);
-    const userInfo = result.data.result.user;
+    const userInfo =
+      result.data.result.type === 'user'
+        ? result.data.result.user
+        : result.data.result.manager;
 
-    const existingUser: UserEntity = await this.usersRepository.findOne({
+    let user: UserEntity = await this.usersRepository.findOne({
       where: {
         id: parseInt(body.context.caller.id),
       },
     });
-    if (!existingUser) {
-      await this.usersRepository.save({
+    if (!user) {
+      user = await this.usersRepository.save({
         id: parseInt(userInfo.id),
         type: userInfo.type,
         name: userInfo.name,
@@ -64,7 +83,7 @@ export class TaskService
           clientId: body.context.caller.id,
           appId: this.appId,
           name: 'task',
-          wamArgs: {},
+          wamArgs: { user },
         },
       },
     };
@@ -73,7 +92,7 @@ export class TaskService
   /**
    * 외부 채널에 `tutorial` 커맨드를 등록하는 메서드
    */
-  private async registerCommand() {
+  get command(): Command {
     const commandForTask: Command = {
       name: TASK,
       scope: 'desk',
@@ -82,7 +101,7 @@ export class TaskService
       alfMode: 'disable',
       enabledByDefault: true,
     };
-
-    await this.apiService.registerCommandToChannel([commandForTask]);
+    return commandForTask;
+    // await this.apiService.registerCommandToChannel([commandForTask]);
   }
 }
