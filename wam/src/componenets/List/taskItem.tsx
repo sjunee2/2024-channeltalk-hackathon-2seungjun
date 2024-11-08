@@ -127,7 +127,7 @@ const TaskItem = ({
         startDate: task.startDate,
         endDate: task.endDate,
         userIds: task.assignUser,
-        deleteAt: new Date().getTime(),
+        deleteAt: null,
       }),
     })
   }
