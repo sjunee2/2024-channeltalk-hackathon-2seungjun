@@ -109,6 +109,7 @@ const CalendarPage = () => {
         (assignUser !== 'none' ? task.assignUser.includes(assignUser) : true)
     )
   }
+  const filteredData = filterTasks(taskData, status, role, assignUser)
 
   // const filteredData = useMemo(() => tas)
 
@@ -134,10 +135,10 @@ const CalendarPage = () => {
           }}
         />
         <Filter />
-        {page === 'calendar' ? (
+          <Calendar taskData={filteredData} />
           <Calendar taskData={taskData} />
         ) : (
-          <List taskData={filterTasks(taskData, status, role, assignUser)} />
+          <List taskData={filteredData} />
         )}
       </div>
     </div>
