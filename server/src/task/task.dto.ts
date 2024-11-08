@@ -4,7 +4,7 @@ import {
   BaseFunctionOutput,
 } from 'src/common/interfaces/function.interface';
 import { TaskStatus } from 'src/infra/task-status.enum';
-import { Column, Timestamp } from 'typeorm';
+import { Timestamp } from 'typeorm';
 
 export class TaskInput extends BaseFunctionInput {}
 

@@ -22,6 +22,7 @@ import { INIT, InitService } from 'src/init/init.service';
 import { ChannelEntity } from 'src/infra/channel.entity';
 import { TaskScheduler } from 'src/task/task.scheduler';
 import { ScheduleModule } from '@nestjs/schedule';
+import { MY_TASK, MyTaskService } from 'src/myTasks/myTask.service';
 
 @Module({
   imports: [
@@ -67,6 +68,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     TaskService,
     InitService,
     TaskScheduler,
+    MyTaskService,
     // {
     //   provide: APP_INTERCEPTOR,
     //   useClass: HttpInterceptorService,
@@ -82,6 +84,7 @@ export class AppModule implements OnModuleInit {
     private readonly tutorialService: TutorialService,
     private readonly taskService: TaskService,
     private readonly initService: InitService,
+    private readonly myTaskService: MyTaskService,
   ) {}
 
   async onModuleInit() {
@@ -90,11 +93,14 @@ export class AppModule implements OnModuleInit {
       this.handlerRegistry.registerHandler(TUTORIAL, this.tutorialService);
       this.handlerRegistry.registerHandler(TASK, this.taskService);
       this.handlerRegistry.registerHandler(INIT, this.initService);
+      this.handlerRegistry.registerHandler(MY_TASK, this.myTaskService);
+
       if (process.env.SYNCHO_COMMAND === 'true') {
         await this.channelApiService.registerCommandToChannel([
           this.tutorialService.command,
           this.taskService.command,
           this.initService.command,
+          this.myTaskService.command,
         ]);
       }
     } catch (error) {

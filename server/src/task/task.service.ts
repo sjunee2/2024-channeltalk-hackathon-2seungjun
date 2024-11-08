@@ -64,7 +64,7 @@ export class TaskService
       result.data.result.type === 'user'
         ? result.data.result.user
         : result.data.result.manager;
-
+    console.log(userInfo);
     let user: UserEntity = await this.usersRepository.findOne({
       where: {
         id: parseInt(body.context.caller.id),
