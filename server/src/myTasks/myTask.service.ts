@@ -53,13 +53,10 @@ export class MyTaskService
       },
     });
     const tasks = await this.taskUserMapRepository.find({
-      where: {
-        user: {
-          id: user.id,
-        },
-      },
-      relations: ['task'],
+      where: { user: { id: user.id } },
+      relations: { task: { taskUserMaps: true } },
     });
+    console.log(tasks);
     let method;
     if (body.params.chat.type === 'userChat') {
       method = 'writeUserChatMessage';
