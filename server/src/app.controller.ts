@@ -5,7 +5,6 @@ import {
   Put,
   Get,
   Param,
-  Res,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { HandlerRegistry } from 'src/common/handler/handler.registry';
@@ -20,9 +19,6 @@ import { HandleTaskRequestDto } from './task/task.dto';
 import { AppService } from './app.service';
 import { TaskEntity } from './infra/task.entity';
 import { UserEntity } from './infra/user.entity';
-import { Response } from 'express';
-import { join } from 'path';
-import * as fs from 'fs';
 
 @Controller()
 export class AppController {

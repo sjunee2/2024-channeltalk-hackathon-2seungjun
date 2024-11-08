@@ -33,7 +33,11 @@ export class TaskScheduler {
     const channels = await this.channelRepository.find();
     for (const channel of channels) {
       const tasks = await this.taskRepository.find({
-        where: { taskStatus: Not(TaskStatus.DONE) },
+        where: {
+          taskStatus: Not(TaskStatus.DONE),
+          deletedAt: null,
+          channelId: channel.id,
+        },
       });
       // 1일 남은 일
       const oneDayTasks = tasks.filter((task) => {

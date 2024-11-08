@@ -75,6 +75,8 @@ export class TaskService
         id: parseInt(userInfo.id),
         type: userInfo.type,
         name: userInfo.name,
+        avatarUrl: userInfo.avatarUrl,
+        channelId: parseInt(body.context.channel.id),
       });
     }
     return {
@@ -84,7 +86,7 @@ export class TaskService
           clientId: body.context.caller.id,
           appId: this.appId,
           name: '',
-          wamArgs: { user },
+          wamArgs: { managerId: body.context.caller.id },
         },
       },
     };
