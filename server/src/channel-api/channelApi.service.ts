@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import axios, { AxiosInstance, InternalAxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Command } from 'src/common/interfaces/command';
 import { BaseFunctionRequest } from 'src/common/interfaces/function.interface';
 import { TokenService } from 'src/token/token.service';
@@ -27,23 +27,9 @@ export class ChannelApiService {
 
   private async initialize() {
     try {
-      this.logger.log('Initializing ChannelApiService...');
-      await this.tokenService.getChannelToken();
-
       this.axiosInstance = axios.create({
         baseURL: this.baseUrl,
       });
-
-      this.axiosInstance.interceptors.request.use(
-        async (config: InternalAxiosRequestConfig) => {
-          this.logger.debug('Adding access token to request headers');
-          return config;
-        },
-        (error) => {
-          this.logger.error('Request interceptor error', error.stack);
-          return Promise.reject(error);
-        },
-      );
 
       this.initialized = true;
       this.logger.log('ChannelApiService initialized successfully');
@@ -74,10 +60,9 @@ export class ChannelApiService {
 
   async useNativeFunction<T>(request: BaseFunctionRequest<T>) {
     try {
-      // const method = request.method;
-      // const callerId = request.context.caller.id;
-      const channelId = String(request.context.channel.id);
-      const requestTokens = await this.tokenService.getChannelToken(channelId);
+      const requestTokens = await this.tokenService.getChannelToken(
+        request.context.channel.id,
+      );
       const response = await this.axiosInstance.put(
         'https://app-store-api.channel.io/general/v1/native/functions',
         request,
@@ -88,6 +73,7 @@ export class ChannelApiService {
           },
         },
       );
+      this.logger.log('네이티브 펑션 실행 결과:', response.data);
       return response;
     } catch (error) {
       this.logger.error('Failed to use native function');
