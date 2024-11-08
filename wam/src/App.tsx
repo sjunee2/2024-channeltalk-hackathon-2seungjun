@@ -4,17 +4,19 @@ import { isMobile } from './utils/userAgent'
 // All packages except `@mantine/hooks` require styles imports
 import '@mantine/core/styles.css'
 
-import { MantineProvider } from '@mantine/core'
+import { Button, MantineProvider } from '@mantine/core'
 import Calendar from './componenets/Calendar'
 import Filter from './componenets/Filter'
 import List from './componenets/List'
-import { FilterStatusInterface, Role, Task, User } from './types/task'
+import { Role, Task, User } from './types/task'
 import { useEffect, useState } from 'react'
 import { useFilterStore } from './store/filter'
 
 function App() {
   const [taskData, setTaskData] = useState<Task[]>([])
   const { status, role, assignUser } = useFilterStore()
+
+  const [page, setPage] = useState<'calendar' | 'list'>('calendar')
 
   useEffect(() => {
     setTaskData([
@@ -74,8 +76,19 @@ function App() {
           padding: isMobile() ? '16px' : '0 24px 24px 24px',
         }}
       >
-        <Filter />
-        <List taskData={filterTasks(taskData, status, role, assignUser)} />
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          <Button
+            onClick={() => {
+              setPage((prev) => (prev === 'calendar' ? 'list' : 'calendar'))
+            }}
+          />
+          <Filter />
+          {page === 'calendar' ? (
+            <Calendar taskData={taskData} />
+          ) : (
+            <List taskData={filterTasks(taskData, status, role, assignUser)} />
+          )}
+        </div>
       </div>
     </MantineProvider>
     // </AppProvider>
