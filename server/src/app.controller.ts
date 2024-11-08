@@ -8,10 +8,15 @@ import {
   GeneralFunctionOutput,
   WamFunctionOutput,
 } from 'src/common/interfaces/function.interface';
+import { CreateTaskRequestDto } from './task/task.dto';
+import { AppService } from './app.service';
 
 @Controller('functions')
 export class AppController {
-  constructor(private readonly handlerRegistry: HandlerRegistry) {}
+  constructor(
+    private readonly handlerRegistry: HandlerRegistry,
+    private readonly appService: AppService,
+  ) {}
 
   @ApiOperation({
     summary: '채널톡 API 엔드포인트',
@@ -33,6 +38,15 @@ export class AppController {
   ): Promise<BaseFunctionOutput> {
     try {
       return await this.handlerRegistry.executeHandler(body);
+    } catch (error) {
+      throw new BadRequestException(error.message);
+    }
+  }
+
+  @Put('task')
+  async createTask(@Body() body: CreateTaskRequestDto): Promise<void> {
+    try {
+      await this.appService.createTask(body);
     } catch (error) {
       throw new BadRequestException(error.message);
     }
