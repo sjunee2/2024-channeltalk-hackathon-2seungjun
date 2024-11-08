@@ -26,6 +26,7 @@ export class AppService {
       taskStatus: body.taskStatus,
       title: body.title,
       contents: body.contents,
+      role: body.role,
       startDate: body.startDate,
       endDate: body.endDate,
       deletedAt: body.deletedAt,
